@@ -1,0 +1,69 @@
+import numpy as np
+import scipy.integrate as integrate
+import matplotlib.pyplot as plt
+import cv2
+
+from skimage.transform import radon, rescale
+
+pixels = 100
+radius = pixels/5
+p = (pixels / 2, pixels / 2 - radius)
+L = 2 * np.pi * radius
+
+
+def theta(tau):
+    return 2 * np.pi * tau + np.sin(16*np.pi*tau)
+
+
+def der_theta(tau):
+    return 4 * np.pi
+
+
+def cos_theta(x):
+    return np.cos(theta(x))
+
+
+def sin_theta(x):
+    return np.sin(theta(x))
+
+
+def gamma(t):
+    x_integral = integrate.quad(cos_theta, 0, t)[0]
+    y_integral = integrate.quad(sin_theta, 0, t)[0]
+    return p + np.multiply(L, [x_integral, y_integral])
+
+
+def der_gamma(t):
+    return np.multiply(L, [cos_theta(t), sin_theta(t)])
+
+
+def radon_transform(gamma, angle, pixels):
+    basis_vector = (np.cos(angle), np.sin(angle))
+    length_to_cross_screen = int(pixels/(np.max([np.cos(angle), np.sin(angle)])))
+    alphas = np.linspace(0, length_to_cross_screen, length_to_cross_screen + 1)
+    radons = []
+    for alpha in alphas:
+        radons.append(integrate.quad(lambda x: integrand(x, basis_vector, alpha), 0, 1)[0])
+    return radons, length_to_cross_screen
+
+def integrand(t, basis_vector, alpha):
+    if np.dot(gamma(t), basis_vector) - alpha < 0:
+        return 0
+    basis_vector_orthogonal = [-basis_vector[1], basis_vector[0]]
+    return np.dot(der_gamma(t), basis_vector_orthogonal)
+
+def draw_graph(theta):
+    img = np.zeros((pixels, pixels, 3), np.uint8)
+
+    for t in np.linspace(0,1, 10000):
+        img[int(gamma(t)[0]), int(gamma(t)[1])] = [255, 255, 255]
+
+    cv2.imwrite(str(pixels) + "_x_" + str(pixels) + ".png", img)
+    cv2_image = cv2.imread(str(pixels) + "_x_" + str(pixels) + ".png", 1)
+
+radon_trans, length_to_cross_screen = radon_transform(gamma, np.pi/4 , pixels)
+
+plt.plot(np.linspace(0, length_to_cross_screen, length_to_cross_screen + 1), radon_trans)
+plt.show()
+
+draw_graph(theta)
