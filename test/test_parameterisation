@@ -5,7 +5,7 @@ import cv2
 
 from skimage.transform import radon, rescale
 
-pixels = 100
+pixels = 200
 radius = pixels/5
 p = (pixels / 2, pixels / 2 - radius)
 L = 2 * np.pi * radius
