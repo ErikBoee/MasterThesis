@@ -53,7 +53,7 @@ def radon_transform(gamma, angle, pixels, t_n):
     basis_vector = (np.cos(angle), np.sin(angle))
     radons = []
     for alpha in alphas:
-        radons.append(integrate.quad(lambda x: integrand(x, basis_vector, alpha), 0, 1)[0])
+        print("ok")
     return radons, length_to_cross_screen
 
 def integrand(t, basis_vector, alpha):
