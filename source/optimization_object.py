@@ -8,6 +8,7 @@ class QuadraticPenaltyOptimizationCurve():
         self.point = init_point
         self.theta_ref = theta_ref
         self.exact_radon_transforms = exact_radon_transforms
+        self.int = 1
 
 
 
