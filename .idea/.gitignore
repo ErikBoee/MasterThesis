@@ -6,3 +6,7 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+.DS_Store
+.idea/sonarlint/issuestore/5/
+*/__pycache__/
