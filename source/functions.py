@@ -1,76 +1,82 @@
 import numpy as np
+from numba import njit
 
 
+@njit
 def theta(tau):
     return 2 * np.pi * tau + np.sin(16 * np.pi * tau)
 
 
+@njit
 def theta_ref(tau):
     return 2 * np.pi * tau
 
 
+@njit
 def der_theta(tau):
     return 2 * np.pi + 16 * np.pi * np.cos(16 * np.pi * tau)
 
 
+@njit
 def der_theta_ref(tau):
     return 2 * np.pi
 
 
+@njit
 def cos_theta(x):
     return np.cos(theta(x))
 
 
+@njit
 def sin_theta(x):
     return np.sin(theta(x))
 
 
+@njit
 def gamma_i(t_n, i, point, length):
-    x_integral = 0
-    y_integral = 0
     n = len(t_n) - 1
     assert (i <= n)
-    for j in range(i):
-        x_integral += (cos_theta(t_n[j]) + cos_theta(t_n[j + 1])) / (2 * n)
-        y_integral += (sin_theta(t_n[j]) + sin_theta(t_n[j + 1])) / (2 * n)
-    integral_values = np.array([x_integral, y_integral])
+    trapezoidal_x_list = np.sum(cos_theta(t_n[1:i])) / n + (cos_theta(t_n[0]) + cos_theta(t_n[i])) / (2 * n)
+    trapezoidal_y_list = np.sum(sin_theta(t_n[1:i])) / n + (sin_theta(t_n[0]) + sin_theta(t_n[i])) / (2 * n)
+    integral_values = np.array([trapezoidal_x_list, trapezoidal_y_list])
     return np.add(point, np.multiply(length, integral_values))
 
 
-def der_gamma_i(t_n, i, length):
-    return np.multiply(length, [cos_theta(t_n[i]), sin_theta(t_n[i])])
+def der_gamma(t, length):
+    return np.multiply(length, [cos_theta(t), sin_theta(t)])
 
 
 def calculate_entire_gamma(t_n, point, length):
     entire_gamma = np.zeros((len(t_n), 2))
     entire_gamma[0] = point
     n = len(t_n) - 1
-    for j in range(1, n + 1):
-        x_value_to_add = length * (cos_theta(t_n[j - 1]) + cos_theta(t_n[j])) / (2 * n)
-        y_value_to_add = length * (sin_theta(t_n[j - 1]) + sin_theta(t_n[j])) / (2 * n)
-        entire_gamma[j] = np.add(entire_gamma[j - 1], [x_value_to_add, y_value_to_add])
+    cos_theta_vector = np.multiply(length / (2 * n), cos_theta(t_n))
+    sin_theta_vector = np.multiply(length / (2 * n), sin_theta(t_n))
+    cos_sum_vector = cos_theta_vector[:n] + cos_theta_vector[1:]
+    sin_sum_vector = sin_theta_vector[:n] + sin_theta_vector[1:]
+    cos_cum_sum_vector = np.cumsum(cos_sum_vector)
+    sin_cum_sum_vector = np.cumsum(sin_sum_vector)
+    cum_sum_vector = np.array([cos_cum_sum_vector, sin_cum_sum_vector]).T
+    entire_gamma[1:] = np.add(point, cum_sum_vector)
     return entire_gamma
 
 
 def calculate_entire_gamma_der(t_n, length):
-    entire_gamma_der = np.zeros((len(t_n), 2))
-    n = len(t_n)
-    for j in range(n):
-        entire_gamma_der[j] = der_gamma_i(t_n, j, length)
-    return entire_gamma_der
+    return der_gamma(t_n, length).T
 
 
-def energy_function(t_n):
-    integral = 0
-    n = len(t_n) - 1
-    for i in range(n - 1):
-        integral += n / 2 * (((theta(t_n[i + 1]) - theta(t_n[i])) - (theta_ref(t_n[i + 1]) - theta_ref(t_n[i]))) ** 2 +
-                             ((theta(t_n[i + 2]) - theta(t_n[i + 1])) - (
-                                     theta_ref(t_n[i + 2]) - theta_ref(t_n[i + 1]))) ** 2)
-    integral += n * ((theta(t_n[n]) - theta(t_n[n - 1])) - (theta_ref(t_n[n]) - theta_ref(t_n[n - 1]))) ** 2
-    return integral
+@njit
+def energy_function(theta_vector, theta_ref_vector):
+    n = len(theta_vector) - 1
+    derivatives_theta = np.multiply(n, theta_vector[1:] - theta_vector[0:n])
+    derivatives_theta_ref = np.multiply(n, theta_ref_vector[1:] - theta_ref_vector[0:n])
+    trapezoidal_integral = sum((derivatives_theta[1:(n - 1)] - derivatives_theta_ref[1:(n - 1)]) ** 2)
+    trapezoidal_integral += (derivatives_theta[0] - derivatives_theta_ref[0]) ** 2 / 2
+    trapezoidal_integral += (derivatives_theta[n - 1] - derivatives_theta_ref[n - 1]) ** 2 / 2
+    return trapezoidal_integral
 
 
+@njit(fastmath=True)
 def get_alphas(angle, pixels):
     assert (0 <= angle <= np.pi)
     length_to_center = pixels / np.sqrt(2)
@@ -82,16 +88,17 @@ def get_alphas(angle, pixels):
             skew = -np.sin(angle - np.pi / 4) * length_to_center
     else:
         if angle <= 3 * np.pi / 4:
-            skew = -np.cos(np.pi / 4 - (angle - np.pi/2)) * length_to_center
+            skew = -np.cos(np.pi / 4 - (angle - np.pi / 2)) * length_to_center
         else:
-            skew = -np.cos((angle - np.pi/2) - np.pi / 4) * length_to_center
+            skew = -np.cos((angle - np.pi / 2) - np.pi / 4) * length_to_center
 
     return np.linspace(-round(pixels / 2 - skew), round(pixels / 2 + skew), pixels)
 
 
+@njit
 def radon_transform(gamma_vector, gamma_der_vector, angle, pixels):
     alphas = get_alphas(angle, pixels)
-    basis_vector = (np.cos(angle), np.sin(angle))
+    basis_vector = np.array([np.cos(angle), np.sin(angle)])
     number_of_alphas = len(alphas)
     radons = np.zeros(number_of_alphas)
     for i in range(number_of_alphas):
@@ -99,6 +106,7 @@ def radon_transform(gamma_vector, gamma_der_vector, angle, pixels):
     return radons
 
 
+@njit
 def integrate_for_radon(gamma_vector, gamma_der_vector, alpha, basis_vector):
     number_of_points = len(gamma_vector) - 1
     integral = 0
@@ -109,8 +117,10 @@ def integrate_for_radon(gamma_vector, gamma_der_vector, alpha, basis_vector):
     return integral
 
 
+@njit
 def integrand(gamma_value, gamma_der_value, basis_vector, alpha):
-    basis_vector_orthogonal = [-basis_vector[1], basis_vector[0]]
+    basis_vector_orthogonal = np.array([-basis_vector[1], basis_vector[0]])
     if np.dot(gamma_value, basis_vector_orthogonal) - alpha < 0:
         return 0
     return -np.dot(gamma_der_value, basis_vector)
+
