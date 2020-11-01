@@ -7,7 +7,7 @@ import test_utilities as ut
 from numba import njit
 import time
 
-pixels = 100
+pixels = 500
 radius = pixels / 3
 point = (pixels / 2, pixels / 2 - radius)
 length = 2 * np.pi * radius
@@ -40,6 +40,9 @@ entire_der_gamma = func.calculate_entire_gamma_der(t_n, length)
 
 start_time = time.time()
 filled_radon_image = ut.create_image_from_curve(entire_gamma, pixels, t_n)
+end_time = time.time()
+print("Time to fill image:", end_time - start_time)
+start_time = time.time()
 for angle in angle_list:
     radon_trans_own = func.radon_transform(entire_gamma, entire_der_gamma, angle, pixels)
     radon_transform_py = radon(filled_radon_image, theta=[ut.rad_to_deg(angle)], circle=True)

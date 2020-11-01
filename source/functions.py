@@ -1,5 +1,11 @@
 import numpy as np
+import cv2
 from numba import njit
+
+
+def trapezoidal_normalized_to_unit_interval(x):
+    n = len(x)
+    return (x[0] + np.sum(2 * x[1:-1]) + x[n - 1]) / 2 * n
 
 
 @njit
@@ -46,6 +52,10 @@ def der_gamma(t, length):
     return np.multiply(length, [cos_theta(t), sin_theta(t)])
 
 
+def der_gamma_from_theta(theta, length):
+    return np.multiply(length, [np.cos(theta), sin_theta(theta)])
+
+
 def calculate_entire_gamma(t_n, point, length):
     entire_gamma = np.zeros((len(t_n), 2))
     entire_gamma[0] = point
@@ -59,6 +69,25 @@ def calculate_entire_gamma(t_n, point, length):
     cum_sum_vector = np.array([cos_cum_sum_vector, sin_cum_sum_vector]).T
     entire_gamma[1:] = np.add(point, cum_sum_vector)
     return entire_gamma
+
+
+def calculate_entire_gamma_from_theta(theta, point, length):
+    entire_gamma = np.zeros((len(theta), 2))
+    entire_gamma[0] = point
+    n = len(theta) - 1
+    cos_theta_vector = np.multiply(length / (2 * n), np.cos(theta))
+    sin_theta_vector = np.multiply(length / (2 * n), np.sin(theta))
+    cos_sum_vector = cos_theta_vector[:n] + cos_theta_vector[1:]
+    sin_sum_vector = sin_theta_vector[:n] + sin_theta_vector[1:]
+    cos_cum_sum_vector = np.cumsum(cos_sum_vector)
+    sin_cum_sum_vector = np.cumsum(sin_sum_vector)
+    cum_sum_vector = np.array([cos_cum_sum_vector, sin_cum_sum_vector]).T
+    entire_gamma[1:] = np.add(point, cum_sum_vector)
+    return entire_gamma
+
+
+def calculate_entire_gamma_der_from_theta(theta, length):
+    return der_gamma_from_theta(theta, length).T
 
 
 def calculate_entire_gamma_der(t_n, length):
@@ -124,3 +153,12 @@ def integrand(gamma_value, gamma_der_value, basis_vector, alpha):
         return 0
     return -np.dot(gamma_der_value, basis_vector)
 
+
+def draw_boundary(gamma, gamma_ref, iterator, pixels):
+    boundary_image = np.zeros((pixels, pixels, 3), np.uint8)
+    for gamma_value in gamma:
+        boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [255, 255, 255]
+    for gamma_value in gamma_ref:
+        boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [255, 255, 255]
+
+    cv2.imwrite(str(pixels) + "_x_" + str(pixels) + "_" + str(iterator) + "_boundary.png", boundary_image)

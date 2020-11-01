@@ -13,3 +13,5 @@ W
 'test/test_radon_and_parameterisation.py,2/a/2adb9d098a040142f3a0a02c15fe74643eee2ed5
 M
 source/optimization_object.py,1/8/185810406812a2e3e707c613ab8d10e5aafcb910
+E
+source/initializer.py,d/7/d725a3dd9753f44b11b85d67ce977b9b81a30e10
