@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 from numba import njit
-from source.constants import DELTA, N_TIME, PIXELS
+from constants import DELTA, N_TIME, PIXELS
 
 
 @njit
