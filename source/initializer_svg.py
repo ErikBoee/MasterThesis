@@ -1,6 +1,6 @@
 import numpy as np
 import source.functions as func
-from source.constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA
+from source.constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA, LAMDA
 from skimage.transform import radon
 import svgpathtools as svg
 import test_utilities as ut
@@ -25,6 +25,7 @@ theta_sol[-1] = theta_sol[0] + 2*np.pi
 
 
 beta = BETA
+lamda = LAMDA
 radius = PIXELS / 3
 init_point = np.array([PIXELS / 2, PIXELS / 2])
 init_length = np.pi * radius

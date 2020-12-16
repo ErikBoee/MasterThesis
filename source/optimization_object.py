@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 class QuadraticPenalty:
 
-    def __init__(self, init_theta, init_length, init_point, theta_ref, gamma_ref, angle_to_exact_radon, beta):
+    def __init__(self, init_theta, init_length, init_point, theta_ref, gamma_ref, angle_to_exact_radon, beta, lamda, c, tau):
         self.theta = init_theta
         self.length = init_length
         self.point = init_point
@@ -19,9 +19,9 @@ class QuadraticPenalty:
         self.angle_to_alphas_and_exact_radon = QuadraticPenalty.calculate_alphas_for_dict(angle_to_exact_radon)
         self.update_gamma()
         self.beta = beta
-        self.lamda = const.LAMDA
-        self.c = const.C
-        self.tau = const.TAU
+        self.lamda = lamda
+        self.c = c
+        self.tau = tau
 
     def armijo_backtracking(self, gradient, gradient_theta, gradient_length, gradient_point, step_size):
         m = -np.linalg.norm(gradient)
@@ -48,10 +48,10 @@ class QuadraticPenalty:
         iterator = self.gradient_descent_to_convergence_point(iterator)
         print(const.ITERATOR, iterator)
         #iterator = self.gradient_descent_to_convergence_length(iterator)
-        print(const.ITERATOR, iterator)
+        #print(const.ITERATOR, iterator)
         quadratic_penalty = const.PENALTY_TOL + 1
         while quadratic_penalty > const.PENALTY_TOL and self.lamda < const.MAX_LAMDA:
-            print("running")
+            print("Lambda: ", self.lamda)
             iterator = self.gradient_descent_to_convergence_m(iterator)
             print(const.ITERATOR, iterator)
             self.lamda *= 10

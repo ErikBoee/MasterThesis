@@ -2,10 +2,10 @@
 #    gamma_ref, init_point, init_length, init_theta
 import source.constants as const
 from source.initializer_svg import beta, theta_ref, angle_to_exact_radon, theta_sol, point_sol, length_sol, \
-    init_point, init_length, init_theta, gamma_solution, angles
+    init_point, init_length, init_theta, gamma_solution, angles, lamda
 import source.optimization_object as opt
-import numpy as np
 from os import path
+import source.utilities_running as ur
 
 problem_dictionary = {
     "Theta initial": init_theta,
@@ -25,7 +25,6 @@ problem_dictionary = {
     "Tau": const.TAU,
     "Step size": const.STEPSIZE,
     "Tolerance": const.TOL,
-    "Number of loops": const.NUMBER_OF_LOOPS,
     "Angles": angles,
     "Tolerance penalty": const.PENALTY_TOL,
     "Max lambda": const.MAX_LAMDA
@@ -36,14 +35,8 @@ filename = "Circle_test_3"
 if __name__ == '__main__':
     if not path.exists(filename + ".npy"):
         opt_object = opt.QuadraticPenalty(init_theta, init_length, init_point, theta_ref,
-                                          gamma_solution, angle_to_exact_radon, beta)
-        problem_dictionary["Initial Objective function"] = opt_object.objective_function()
-        theta, length, point, iterator, obj_function = opt_object.gradient_descent()
-        problem_dictionary["Theta reconstructed"] = theta
-        problem_dictionary["Point reconstructed"] = point
-        problem_dictionary["Length reconstructed"] = length
-        problem_dictionary["Iterator"] = length
-        problem_dictionary["Final Objective function"] = obj_function
-        np.save(filename, problem_dictionary, allow_pickle=True)
+                                          gamma_solution, angle_to_exact_radon, beta, lamda, const.C, const.TAU)
+        ur.update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
+
     else:
         print("Already created this problem")
