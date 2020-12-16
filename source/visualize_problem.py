@@ -1,5 +1,5 @@
 import numpy as np
-import source.functions as func
+import functions as func
 import matplotlib.pyplot as plt
 
 def visualize_problem(problem_dictionary):
