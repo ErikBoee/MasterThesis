@@ -1,18 +1,18 @@
 import numpy as np
 import source.functions as func
-from source.constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM
+from source.constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA
 import test_utilities as ut
 from skimage.transform import radon
 
-beta = 0.1
+beta = BETA
 radius = PIXELS / 3
-init_point = (PIXELS / 2, PIXELS / 2 - radius)
+init_point = np.array([PIXELS / 2, PIXELS / 2 - radius])
 init_length = 2 * np.pi * radius
-point_ref = (PIXELS / 2, PIXELS / 2 - radius)
+point_ref = np.array([PIXELS / 2, PIXELS / 2 - radius/1.2])
 length_ref = 2 * np.pi * radius
 point_sol = point_ref
 length_sol = length_ref
-angles = np.linspace(0, np.pi, 5)
+angles = [0.93, 1.34, 1.78, 2.08]
 
 t_n = np.linspace(0, 1, N_TIME + 1)
 
@@ -22,7 +22,7 @@ def theta(tau):
 
 
 def calc_theta_ref(tau):
-    return 2 * np.pi * tau
+    return 2 * np.pi * tau + 0.5 * np.sin(16 * np.pi * tau)
 
 
 def calc_gamma_ref():

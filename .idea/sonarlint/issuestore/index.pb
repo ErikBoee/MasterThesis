@@ -15,3 +15,21 @@ M
 source/optimization_object.py,1/8/185810406812a2e3e707c613ab8d10e5aafcb910
 E
 source/initializer.py,d/7/d725a3dd9753f44b11b85d67ce977b9b81a30e10
+E
+source/derivatives.py,a/9/a93283266e4e1a3ce76cab0e77f20d773999e709
+H
+test/test_derivatives.py,5/2/527b3ce920f5081e6720f4a16c8aa5945865d156
+C
+test/human_path.svg,7/f/7f192ebfaa0d657a624590155e61c59c60ab6a79
+@
+test/human_2.svg,b/d/bd16086181caf558ab2cf58402b2f132f557dd37
+K
+test/star_shaped_test_1.svg,6/2/62e1288da6a87626d123bba5f4081ce2e9956b88
+N
+test/star_shaped_reference.svg,6/3/635b197aef0c0fac4dd65185a1c830b987bab2c0
+@
+test/test_svg.py,a/5/a5667199b4c5332ca20fd95a6e1299522cf09a21
+I
+source/initializer_svg.py,1/5/15f68c59c8a469555d9c40ea4a3ebdd05be17479
+=
+test/test.svg,0/c/0c4294b51e88bbb5948f7435040b3f2d5255bb4b

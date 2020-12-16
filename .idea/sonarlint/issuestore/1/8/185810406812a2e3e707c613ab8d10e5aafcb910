@@ -1,2 +1,11 @@
 
-=python:S1259"Remove this commented out code.(“ˆ¼¤8½å¥×.
+ypython:S1192b"ZDefine a constant instead of duplicating this literal "Norm Gradient numerical: " 3 times.(Şëã8–•ûãİ.
+xpython:S3776N"TRefactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.(Ÿş´øÿÿÿÿ8˜ôÖàİ.
+python:S1192_"]Define a constant instead of duplicating this literal "Objective value first term: " 3 times.(¶ö‘Éÿÿÿÿÿ8–•ûãİ.
+ƒpython:S1192a"_Define a constant instead of duplicating this literal "Objective value penalty term: " 3 times.(‚ØŞÖüÿÿÿÿ8–•ûãİ.
+ipython:S1192]"JDefine a constant instead of duplicating this literal "Iterator:" 3 times.(›»à±8–•ûãİ.
+Ppython:S1481"0Remove the unused local variable "obj_function".(¡ÌáÑ8òÇ¾¿İ.
+Ppython:S1481ó"0Remove the unused local variable "obj_function".(¡ÌáÑ8ä½¿İ.
+Ppython:S1481œ"0Remove the unused local variable "obj_function".(¡ÌáÑ8Ö¾Á¿İ.
+‚python:S1192`"^Define a constant instead of duplicating this literal "Objective value energy term: " 3 times.(Ü²£Ïøÿÿÿÿ8–•ûãİ.
+vpython:S1192^"RDefine a constant instead of duplicating this literal "Objective value: " 3 times.(£°êšşÿÿÿÿ8–•ûãİ.

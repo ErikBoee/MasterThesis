@@ -1,11 +1,14 @@
 import numpy as np
 import cv2
 from numba import njit
+from source.constants import DELTA, N_TIME, PIXELS
 
 
-def trapezoidal_normalized_to_unit_interval(x):
+@njit
+def trapezoidal_rule(x, b, a):
     n = len(x)
-    return (x[0] + np.sum(2 * x[1:-1]) + x[n - 1]) / 2 * n
+    interval_lengths = (b - a) / (n - 1)
+    return (x[0] + np.sum(2 * x[1:-1]) + x[n - 1]) / 2 * interval_lengths
 
 
 @njit
@@ -53,7 +56,28 @@ def der_gamma(t, length):
 
 
 def der_gamma_from_theta(theta, length):
-    return np.multiply(length, [np.cos(theta), sin_theta(theta)])
+    return np.multiply(length, [np.cos(theta), np.sin(theta)])
+
+
+def der_gamma_diff_theta(theta, length):
+    return_vector = np.multiply(length, [-np.sin(theta[:-1]), np.cos(theta[:-1])])
+    return return_vector.T
+
+
+def gamma_diff_theta(theta, length):
+    derivatives = np.zeros((N_TIME + 1, N_TIME, 2))
+    for i in range(1, N_TIME + 1):
+        for j in range(1, i + 1):
+            if j < N_TIME:
+                derivatives[i, j - 1] += np.multiply(length / (2 * N_TIME),
+                                                     np.array([-np.sin(theta[j - 1]), np.cos(theta[j - 1])]))
+                derivatives[i, j] += np.multiply(length / (2 * N_TIME), np.array([-np.sin(theta[j]), np.cos(theta[j])]))
+            else:
+                derivatives[i, j - 1] += np.multiply(length / (2 * N_TIME),
+                                                     np.array([-np.sin(theta[j - 1]), np.cos(theta[j - 1])]))
+                derivatives[i, 0] += np.multiply(length / (2 * N_TIME), np.array([-np.sin(theta[j]), np.cos(theta[j])]))
+
+    return derivatives
 
 
 def calculate_entire_gamma(t_n, point, length):
@@ -149,16 +173,30 @@ def integrate_for_radon(gamma_vector, gamma_der_vector, alpha, basis_vector):
 @njit
 def integrand(gamma_value, gamma_der_value, basis_vector, alpha):
     basis_vector_orthogonal = np.array([-basis_vector[1], basis_vector[0]])
-    if np.dot(gamma_value, basis_vector_orthogonal) - alpha < 0:
-        return 0
-    return -np.dot(gamma_der_value, basis_vector)
+    heaviside = heaviside_cont_num(np.dot(gamma_value, basis_vector_orthogonal) - alpha, DELTA)
+    return heaviside * -np.dot(gamma_der_value, basis_vector)
+
+
+@njit
+def heaviside_cont_num(x, delta):
+    return 1 / (1 + np.exp(- 2 * x / delta))
+
+
+@njit
+def heaviside_cont_analytic(x, delta):
+    if x <= -delta / 2.0:
+        return 0.0
+    elif x < delta / 2.0:
+        return x / delta + 1 / 2.0
+    return 1.0
 
 
 def draw_boundary(gamma, gamma_ref, iterator, pixels):
     boundary_image = np.zeros((pixels, pixels, 3), np.uint8)
     for gamma_value in gamma:
-        boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [255, 255, 255]
+        if -1 < int(gamma_value[0]) < pixels and -1 < int(gamma_value[1]) < pixels:
+            boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [255, 255, 255]
     for gamma_value in gamma_ref:
-        boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [255, 255, 255]
+        boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [0, 255, 255]
 
     cv2.imwrite(str(pixels) + "_x_" + str(pixels) + "_" + str(iterator) + "_boundary.png", boundary_image)
