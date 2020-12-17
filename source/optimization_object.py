@@ -49,8 +49,6 @@ class QuadraticPenalty:
         iterator = 0
         iterator = self.gradient_descent_to_convergence_point(iterator)
         print(const.ITERATOR, iterator)
-        #iterator = self.gradient_descent_to_convergence_length(iterator)
-        #print(const.ITERATOR, iterator)
         quadratic_penalty = const.PENALTY_TOL + 1
         while quadratic_penalty > const.PENALTY_TOL and self.lamda < const.MAX_LAMDA:
             print("Lambda: ", self.lamda)
@@ -117,7 +115,7 @@ class QuadraticPenalty:
         step_size = self.armijo_backtracking(gradient_num, gradient_theta_num, gradient_length_num,
                                              gradient_point_num, step_size)
 
-        self.display_information(iterator, step_size, gradient_num)
+        #self.display_information(iterator, step_size, gradient_num)
 
     def display_information(self, iterator, step_size, gradient_num):
         if iterator % 10 == 0:

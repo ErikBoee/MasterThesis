@@ -17,7 +17,6 @@ def visualize_problem(problem_dictionary):
     plt.plot(reconstructed_gamma[:, 0], reconstructed_gamma[:, 1], label="reconstructed")
     plt.plot(solution_gamma[:, 0], solution_gamma[:, 1], label="solution")
     plt.legend()
-    plt.savefig('testplot.pdf')
     plt.show()
 
 

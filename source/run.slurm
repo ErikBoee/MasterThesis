@@ -5,14 +5,14 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=8
 #SBATCH --mem=12000
-#SBATCH --job-name="testidun"
-#SBATCH --output=testidun.out
+#SBATCH --job-name="few_iterations"
+#SBATCH --output=few_iterations.out
 #SBATCH --mail-user=erikob@stud.ntnu.no
 #SBATCH --mail-type=ALL
 
-module load GCCcore/.9.3.0
-module load Python/3.8.2
+module load GCCcore/.7.3.0
+module load Python/3.6.6
 
 source ../optimization/bin/activate
 
-python3 visualize_problem.py
+python3 idun_run.py
