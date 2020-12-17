@@ -13,6 +13,6 @@
 module load GCCcore/.7.3.0
 module load Python/3.6.6
 
-source ../optimization/bin/activate
+source ../../optimization/bin/activate
 
 python3 idun_run.py
