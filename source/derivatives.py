@@ -1,5 +1,5 @@
-from source.constants import N_TIME, PIXELS, DELTA
-import source.functions as func
+from constants import N_TIME, PIXELS, DELTA
+import functions as func
 import numpy as np
 from numba import njit
 

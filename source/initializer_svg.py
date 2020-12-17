@@ -1,9 +1,9 @@
 import numpy as np
-import source.functions as func
-from source.constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA, LAMDA
+import functions as func
+from constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA, LAMDA
 from skimage.transform import radon
 import svgpathtools as svg
-import test_utilities as ut
+import utilities_running as ur
 
 # Import the curves from svg file
 curves, _ = svg.svg2paths('../test/circle_edit_3.svg')
@@ -41,6 +41,6 @@ gamma_solution = func.calculate_entire_gamma_from_theta(theta_sol, point_sol, le
 gamma_ref = func.calculate_entire_gamma_from_theta(theta_ref, point_ref, length_sol)
 angle_to_exact_radon = {}
 for angle in angles:
-    filled_radon_image = ut.create_image_from_curve(gamma_solution, PIXELS, t_ref)
-    radon_transform_py = radon(filled_radon_image, theta=[ut.rad_to_deg(angle)], circle=True)
+    filled_radon_image = ur.create_image_from_curve(gamma_solution, PIXELS, t_ref)
+    radon_transform_py = radon(filled_radon_image, theta=[ur.rad_to_deg(angle)], circle=True)
     angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}

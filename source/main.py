@@ -31,11 +31,12 @@ problem_dictionary = {
 }
 
 filename = "Circle_test_3"
-
+max_iterator = 1000
 if __name__ == '__main__':
     if not path.exists(filename + ".npy"):
         opt_object = opt.QuadraticPenalty(init_theta, init_length, init_point, theta_ref,
-                                          gamma_solution, angle_to_exact_radon, beta, lamda, const.C, const.TAU)
+                                          gamma_solution, angle_to_exact_radon, beta, lamda, const.C, const.TAU,
+                                          max_iterator)
         ur.update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
 
     else:

@@ -23,6 +23,7 @@ def visualize_problem(problem_dictionary):
 
 filename = "Problems/Circle_test_well_approximation.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
+print(problem_dictionary)
 visualize_problem(problem_dictionary)
 
 

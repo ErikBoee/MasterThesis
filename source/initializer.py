@@ -1,6 +1,6 @@
 import numpy as np
-import source.functions as func
-from source.constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA
+import functions as func
+from constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA
 import test_utilities as ut
 from skimage.transform import radon
 

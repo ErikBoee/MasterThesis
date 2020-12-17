@@ -2,15 +2,16 @@ from copy import deepcopy
 
 import numpy as np
 
-import source.constants as const
-import source.derivatives as der
-import source.functions as func
+import constants as const
+import derivatives as der
+import functions as func
 import matplotlib.pyplot as plt
 
 
 class QuadraticPenalty:
 
-    def __init__(self, init_theta, init_length, init_point, theta_ref, gamma_ref, angle_to_exact_radon, beta, lamda, c, tau):
+    def __init__(self, init_theta, init_length, init_point, theta_ref, gamma_ref,
+                 angle_to_exact_radon, beta, lamda, c, tau, max_iterator):
         self.theta = init_theta
         self.length = init_length
         self.point = init_point
@@ -22,6 +23,7 @@ class QuadraticPenalty:
         self.lamda = lamda
         self.c = c
         self.tau = tau
+        self.max_iterator = max_iterator
 
     def armijo_backtracking(self, gradient, gradient_theta, gradient_length, gradient_point, step_size):
         m = -np.linalg.norm(gradient)
@@ -62,7 +64,7 @@ class QuadraticPenalty:
     def gradient_descent_to_convergence_m(self, iterator):
         former_obj = -2 * const.TOL
         count = 0
-        while (abs(former_obj - self.objective_function()) > const.TOL or count < 3) and iterator < 1000:
+        while (abs(former_obj - self.objective_function()) > const.TOL or count < 3) and iterator < self.max_iterator:
             former_obj = self.objective_function()
             gradient_theta_num = self.numerical_gradient_theta()
             gradient_length_num = self.numerical_gradient_length()
@@ -79,7 +81,7 @@ class QuadraticPenalty:
     def gradient_descent_to_convergence_length(self, iterator):
         former_obj = -2 * const.TOL
         count = 0
-        while (abs(former_obj - self.objective_function()) > const.TOL or count < 3) and iterator < 1000:
+        while (abs(former_obj - self.objective_function()) > const.TOL or count < 3) and iterator < self.max_iterator:
             former_obj = self.objective_function()
             gradient_theta_num = np.zeros(len(self.theta) - 1)
             gradient_length_num = self.numerical_gradient_length()
@@ -95,7 +97,7 @@ class QuadraticPenalty:
     def gradient_descent_to_convergence_point(self, iterator):
         former_obj = -2 * const.TOL
         count = 0
-        while (abs(former_obj - self.objective_function()) > const.TOL or count < 3) and iterator < 1000:
+        while (abs(former_obj - self.objective_function()) > const.TOL or count < 3) and iterator < self.max_iterator:
             former_obj = self.objective_function()
             gradient_theta_num = np.zeros(len(self.theta) - 1)
             gradient_length_num = 0.0
