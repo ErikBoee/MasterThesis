@@ -20,7 +20,7 @@ def visualize_problem(problem_dictionary):
     plt.show()
 
 
-filename = "Problems/Bad_example_star.npy"
+filename = "Problems/Better_attempt_on_bump.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 print(problem_dictionary)
 visualize_problem(problem_dictionary)

@@ -48,7 +48,7 @@ def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
     problem_dictionary["Length reconstructed"] = length
     problem_dictionary["Iterator"] = iterator
     problem_dictionary["Final Objective function"] = obj_function
-    np.save(filename + "_after_idun", problem_dictionary, allow_pickle=True)
+    np.save(filename[:-4] + "_after_idun", problem_dictionary, allow_pickle=True)
     return problem_dictionary
 
 
