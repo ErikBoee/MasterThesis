@@ -2,7 +2,7 @@ import numpy as np
 import optimization_object as opt
 import functions as func
 from skimage.transform import radon
-from constants import EXACT_RADON_TRANSFORM
+from constants import EXACT_RADON_TRANSFORM, N_TIME
 import numba
 from numba import njit
 
@@ -60,7 +60,7 @@ def get_opt_object_from_problem_dictionary(problem_dictionary, max_iterator):
     angle_to_exact_radon = {}
     for angle in problem_dictionary["Angles"]:
         filled_radon_image = create_image_from_curve(gamma_solution, problem_dictionary["Pixels"],
-                                                     np.linspace(0, 1, problem_dictionary["N time"] + 1))
+                                                     np.linspace(0, 1, N_TIME + 1))
         radon_transform_py = radon(filled_radon_image, theta=[rad_to_deg(angle)], circle=True)
         angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
 

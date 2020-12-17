@@ -30,8 +30,8 @@ problem_dictionary = {
     "Max lambda": const.MAX_LAMDA
 }
 
-filename = "Poor regularization"
-max_iterator = 100
+filename = "Good_example_first"
+max_iterator = 10
 if __name__ == '__main__':
     if not path.exists(filename + ".npy"):
         opt_object = opt.QuadraticPenalty(init_theta, init_length, init_point, theta_ref,

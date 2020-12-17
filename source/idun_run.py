@@ -3,7 +3,7 @@ import utilities_running as ur
 import constants as const
 
 max_iterator = 10000
-filename = "Problems/Bad_example_star.npy"
+filename = "Problems/Good_example.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 problem_dictionary["Epsilon for derivative"] = const.EPSILON
 problem_dictionary["Delta for heaviside"] = const.DELTA

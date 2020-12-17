@@ -6,12 +6,11 @@ import svgpathtools as svg
 import utilities_running as ur
 
 # Import the curves from svg file
-curves, _ = svg.svg2paths('../test/circle_edit_3.svg')
+curves, _ = svg.svg2paths('../test/star_shaped_reference.svg')
 c_ref = curves[0]
 
-curves, _ = svg.svg2paths('../test/circle_edit_2.svg')
+curves, _ = svg.svg2paths('../test/star_shaped_test_1.svg')
 c_sol = curves[0]
-
 n = N_TIME
 t_ref = np.array([svg.path.inv_arclength(c_ref, s) for s in np.linspace(0, c_ref.length(), n + 1)])
 t_sol = np.array([svg.path.inv_arclength(c_sol, s) for s in np.linspace(0, c_sol.length(), n + 1)])
@@ -27,7 +26,7 @@ theta_sol[-1] = theta_sol[0] + 2*np.pi
 beta = BETA
 lamda = LAMDA
 radius = PIXELS / 3
-init_point = np.array([PIXELS / 2, PIXELS / 2])
+init_point = np.array([PIXELS / 2 + 5, PIXELS / 2 + 5])
 init_length = np.pi * radius
 point_ref = np.array([PIXELS / 2, PIXELS / 2])
 length_ref = np.pi * radius

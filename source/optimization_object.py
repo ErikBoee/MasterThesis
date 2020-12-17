@@ -115,7 +115,7 @@ class QuadraticPenalty:
         step_size = self.armijo_backtracking(gradient_num, gradient_theta_num, gradient_length_num,
                                              gradient_point_num, step_size)
 
-        #self.display_information(iterator, step_size, gradient_num)
+        self.display_information(iterator, step_size, gradient_num)
 
     def display_information(self, iterator, step_size, gradient_num):
         if iterator % 10 == 0:
