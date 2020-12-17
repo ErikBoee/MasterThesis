@@ -1,7 +1,6 @@
 import numpy as np
 import optimization_object as opt
 import functions as func
-import test_utilities as ut
 from skimage.transform import radon
 from constants import EXACT_RADON_TRANSFORM
 import numba
@@ -10,6 +9,7 @@ from numba import njit
 
 def rad_to_deg(rad):
     return 180 * rad / np.pi
+
 
 @njit(fastmath=True)
 def calculate_winding_number(point_to_wind, entire_gamma):
@@ -22,6 +22,7 @@ def calculate_winding_number(point_to_wind, entire_gamma):
     signed_angles[signed_angles < -np.pi] += 2 * np.pi
     winding_number = np.sum(signed_angles)
     return round(winding_number / (2 * np.pi))
+
 
 @njit
 def create_image_from_curve(entire_gamma, pixels, t_list):
@@ -37,6 +38,7 @@ def create_image_from_curve(entire_gamma, pixels, t_list):
             if not (i, j) in boundary_pixels and calculate_winding_number(np.array([i, j]), entire_gamma) == 1:
                 img[i, j] = 1.0
     return img
+
 
 def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename):
     problem_dictionary["Initial Objective function"] = opt_object.objective_function()
@@ -57,9 +59,9 @@ def get_opt_object_from_problem_dictionary(problem_dictionary, max_iterator):
                                                             )
     angle_to_exact_radon = {}
     for angle in problem_dictionary["Angles"]:
-        filled_radon_image = ut.create_image_from_curve(gamma_solution, problem_dictionary["Pixels"],
-                                                        np.linspace(0, 1, problem_dictionary["N time"] + 1))
-        radon_transform_py = radon(filled_radon_image, theta=[ut.rad_to_deg(angle)], circle=True)
+        filled_radon_image = create_image_from_curve(gamma_solution, problem_dictionary["Pixels"],
+                                                     np.linspace(0, 1, problem_dictionary["N time"] + 1))
+        radon_transform_py = radon(filled_radon_image, theta=[rad_to_deg(angle)], circle=True)
         angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
 
     opt_object = opt.QuadraticPenalty(problem_dictionary["Theta initial"], problem_dictionary["Length initial"],
