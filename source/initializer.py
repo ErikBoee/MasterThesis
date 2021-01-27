@@ -43,7 +43,7 @@ gamma_ref = calc_gamma_ref()
 theta_solution = theta(t_n)
 gamma_solution = func.calculate_entire_gamma_from_theta(theta_solution, point_sol, length_sol)
 angle_to_exact_radon = {}
+filled_radon_image = ut.create_image_from_curve(gamma_solution, PIXELS, t_n)
 for angle in angles:
-    filled_radon_image = ut.create_image_from_curve(gamma_solution, PIXELS, t_n)
     radon_transform_py = radon(filled_radon_image, theta=[ut.rad_to_deg(angle)], circle=True)
     angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
