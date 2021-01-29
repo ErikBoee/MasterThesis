@@ -1,5 +1,5 @@
 import numpy as np
-import optimization_object as opt
+import optimization_object_gd as opt
 import functions as func
 from skimage.transform import radon
 from constants import EXACT_RADON_TRANSFORM, N_TIME
@@ -64,10 +64,10 @@ def get_opt_object_from_problem_dictionary(problem_dictionary, max_iterator):
         radon_transform_py = radon(filled_radon_image, theta=[rad_to_deg(angle)], circle=True)
         angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
 
-    opt_object = opt.QuadraticPenalty(problem_dictionary["Theta initial"], problem_dictionary["Length initial"],
-                                      problem_dictionary["Point initial"], problem_dictionary["Theta reference"],
-                                      gamma_solution, angle_to_exact_radon, problem_dictionary["Beta"],
-                                      problem_dictionary["Lambda"], problem_dictionary["C"], problem_dictionary["Tau"],
-                                      max_iterator)
+    opt_object = opt.OptimizationObjectGD(problem_dictionary["Theta initial"], problem_dictionary["Length initial"],
+                                          problem_dictionary["Point initial"], problem_dictionary["Theta reference"],
+                                          gamma_solution, angle_to_exact_radon, problem_dictionary["Beta"],
+                                          problem_dictionary["Lambda"], problem_dictionary["C"], problem_dictionary["Tau"],
+                                          max_iterator)
 
     return opt_object

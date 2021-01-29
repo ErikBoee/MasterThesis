@@ -3,12 +3,12 @@ from copy import deepcopy
 from source.initializer import beta, theta_ref, angle_to_exact_radon, \
     gamma_ref, init_point, init_length, init_theta, theta_solution
 import source.derivatives as der
-import source.optimization_object as opt
+import source.optimization_object_gd as opt
 import source.constants as const
 import source.functions as func
 
-opt_object = opt.QuadraticPenalty(init_theta, init_length, init_point, theta_solution,
-                                  gamma_ref, angle_to_exact_radon, beta)
+opt_object = opt.OptimizationObjectGD(init_theta, init_length, init_point, theta_solution,
+                                      gamma_ref, angle_to_exact_radon, beta)
 
 
 def numerical_gradient_theta_energy_func(opt_object):

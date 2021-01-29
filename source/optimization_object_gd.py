@@ -8,7 +8,7 @@ import functions as func
 import matplotlib.pyplot as plt
 
 
-class QuadraticPenalty:
+class OptimizationObjectGD:
 
     def __init__(self, init_theta, init_length, init_point, theta_ref, gamma_ref,
                  angle_to_exact_radon, beta, lamda, c, tau, max_iterator):
@@ -17,7 +17,7 @@ class QuadraticPenalty:
         self.point = init_point
         self.theta_ref = theta_ref
         self.gamma_ref = gamma_ref
-        self.angle_to_alphas_and_exact_radon = QuadraticPenalty.calculate_alphas_for_dict(angle_to_exact_radon)
+        self.angle_to_alphas_and_exact_radon = OptimizationObjectGD.calculate_alphas_for_dict(angle_to_exact_radon)
         self.update_gamma()
         self.beta = beta
         self.lamda = lamda
@@ -341,12 +341,12 @@ class QuadraticPenalty:
         basis_vector_orthogonal = np.array([-basis_vector[1], basis_vector[0]])
         gamma_diff_theta = func.gamma_diff_theta(self.theta, self.length)
         gamma_der_diff_theta = func.der_gamma_diff_theta(self.theta, self.length)
-        derivatives = QuadraticPenalty.calc_derivative_d_diff_theta_given_alphas(differences_from_exact, alphas,
-                                                                                 basis_vector,
-                                                                                 basis_vector_orthogonal, self.gamma,
-                                                                                 self.gamma_der,
-                                                                                 gamma_diff_theta,
-                                                                                 gamma_der_diff_theta)
+        derivatives = OptimizationObjectGD.calc_derivative_d_diff_theta_given_alphas(differences_from_exact, alphas,
+                                                                                     basis_vector,
+                                                                                     basis_vector_orthogonal, self.gamma,
+                                                                                     self.gamma_der,
+                                                                                     gamma_diff_theta,
+                                                                                     gamma_der_diff_theta)
         return derivatives
 
     def der_d_diff_theta(self):

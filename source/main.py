@@ -3,7 +3,7 @@
 import source.constants as const
 from source.initializer_svg import beta, theta_ref, angle_to_exact_radon, theta_sol, point_sol, length_sol, \
     init_point, init_length, init_theta, gamma_solution, angles, lamda
-import source.optimization_object as opt
+import source.optimization_object_gd as opt
 from os import path
 import source.utilities_running as ur
 
@@ -34,9 +34,9 @@ filename = "Good_example_first"
 max_iterator = 10
 if __name__ == '__main__':
     if not path.exists(filename + ".npy"):
-        opt_object = opt.QuadraticPenalty(init_theta, init_length, init_point, theta_ref,
-                                          gamma_solution, angle_to_exact_radon, beta, lamda, const.C, const.TAU,
-                                          max_iterator)
+        opt_object = opt.OptimizationObjectGD(init_theta, init_length, init_point, theta_ref,
+                                              gamma_solution, angle_to_exact_radon, beta, lamda, const.C, const.TAU,
+                                              max_iterator)
         ur.update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
 
     else:
