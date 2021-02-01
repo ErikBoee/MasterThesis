@@ -34,20 +34,20 @@ class OptimizationObjectBFGS:
         m = search_direction.T @ gradient
         former_obj = self.objective_function(self.theta, self.length, self.point)
         obj_i_1 = former_obj
-        while i < max_iter:
+        while i < max_iter and alpha_i < alpha_max:
             theta_i, length_i, point_i = self.update_variables(alpha_i, search_direction)
             obj_i = self.objective_function(theta_i, length_i, point_i)
             if obj_i > former_obj + self.c_1 * m * alpha_i or (i > 1 and obj_i >= obj_i_1):
-                return self.zoom(alpha_i_1, alpha_i)
+                return self.zoom(alpha_i_1, alpha_i, former_obj, search_direction, m)
             gradient_i = self.get_gradient(theta_i, length_i, point_i)
             m_i = search_direction.T @ gradient_i
-            if abs(m_i) <= self.c_2*m:
+            if abs(m_i) <= self.c_2 * m:
                 return alpha_i
             if m_i >= 0:
-                return self.zoom(alpha_i, alpha_i_1)
+                return self.zoom(alpha_i, alpha_i_1, former_obj, search_direction, m)
             obj_i_1 = obj_i
             alpha_i_1 = alpha_i
-            alpha_i = (alpha_max + alpha_i)/2
+            alpha_i = (alpha_i + alpha_max) / 2
         return alpha_i
 
     def update_variables(self, alpha, search_direction):
@@ -58,8 +58,25 @@ class OptimizationObjectBFGS:
         length = self.length + alpha * search_direction[2]
         return theta, length, point
 
-    def zoom(self, alpha_i, alpha_i_1):
-        return 1
+    def zoom(self, alpha_low, alpha_high, former_obj, search_direction, m):
+        max_iter = 100
+        j = 1
+        alpha_j = (alpha_high + alpha_low) / 2
+        while j < max_iter:
+            theta_j, length_j, point_j = self.update_variables(alpha_j, search_direction)
+            if self.objective_function(theta_j, length_j, point_j) > former_obj + self.c_1 * m * alpha_j:
+                alpha_high = alpha_j
+            else:
+                gradient_j = self.get_gradient(theta_j, length_j, point_j)
+                m_j = search_direction.T @ gradient_j
+                if abs(m_j) <= -self.c_2 * m:
+                    return alpha_j
+                if m_j * (alpha_high - alpha_low) >= 0:
+                    alpha_high = alpha_low
+                alpha_low = alpha_j
+            alpha_j = (alpha_high + alpha_low) / 2
+            j += 1
+        return alpha_j
 
     def get_gradient(self, theta, length, point):
         gradient_theta_num = self.numerical_gradient_theta(theta, length, point)
@@ -69,61 +86,70 @@ class OptimizationObjectBFGS:
                                       axis=0)
         return gradient_num
 
+    @staticmethod
+    def get_variables(theta, length, point):
+        return np.concatenate((point, [length], theta[:-1]),
+                              axis=0)
 
-    def gradient_descent(self):
+    def bfgs(self):
         func.draw_boundary(self.gamma, self.gamma_ref, -1, const.PIXELS)
         iterator = 0
-        iterator = self.gradient_descent_to_convergence_point(iterator)
-        print(const.ITERATOR, iterator)
         quadratic_penalty = const.PENALTY_TOL + 1
         while quadratic_penalty > const.PENALTY_TOL and self.lamda < const.MAX_LAMDA:
             print("Lambda: ", self.lamda)
-            iterator = self.gradient_descent_to_convergence_m(iterator)
+            iterator = self.bfgs_to_convergence_m(iterator)
             print(const.ITERATOR, iterator)
             self.lamda *= 10
-            quadratic_penalty = self.quadratic_penalty_term()
+            quadratic_penalty = self.quadratic_penalty_term(self.theta)
             iterator = 0
-        return self.theta, self.length, self.point, iterator, self.objective_function()
+        return self.theta, self.length, self.point, iterator, \
+               self.objective_function(self.theta, self.length, self.point)
 
-    def gradient_descent_to_convergence_m(self, iterator):
+    def bfgs_to_convergence_m(self, iterator):
         former_obj = -2 * const.TOL
         count = 0
-        while (abs(former_obj - self.objective_function()) > const.TOL or count < 3) and iterator < self.max_iterator:
-            former_obj = self.objective_function()
-            gradient_theta_num = self.numerical_gradient_theta()
-            gradient_length_num = self.numerical_gradient_length()
-            gradient_point_num = self.numerical_gradient_point()
-            self.inner_loop_update_gradient_descent(gradient_theta_num, gradient_length_num, gradient_point_num,
-                                                    iterator)
+        beta_k_inv = np.eye(len(self.theta) + 2)
+        while (abs(former_obj - self.objective_function(self.theta, self.length, self.point))
+               > const.TOL or count < 3) \
+                and iterator < self.max_iterator:
+            former_obj = self.objective_function(self.theta, self.length, self.point)
+            gradient_num = self.get_gradient(self.theta, self.length, self.point)
+            beta_k_inv, self.theta, self.length, self.point = \
+                self.inner_loop_update_bfgs(gradient_num, beta_k_inv)
 
-            if abs(former_obj - self.objective_function()) <= const.TOL:
+            if abs(former_obj - self.objective_function(self.theta, self.length, self.point)) <= const.TOL:
                 count += 1
             iterator += 1
+            if iterator % 1 == 0:
+                self.update_gamma()
+                func.draw_boundary(self.gamma, self.gamma_ref, iterator, const.PIXELS)
+                self.print_objective_information(iterator, gradient_num)
         print("Finished optimization m")
         return iterator
 
-    def inner_loop_update_gradient_descent(self, gradient_theta_num, gradient_length_num, gradient_point_num, iterator):
-        gradient_num = np.concatenate((gradient_point_num, [gradient_length_num], gradient_theta_num),
-                                      axis=0)
-        step_size = const.STEPSIZE
-        step_size = self.armijo_backtracking(gradient_num, gradient_theta_num, gradient_length_num,
-                                             gradient_point_num, step_size)
-
-        # self.display_information(iterator, step_size, gradient_num)
-
-    def inner_loop_BFGS(self, gradient_theta_num, gradient_length_num, gradient_point_num, beta_k_inv, iterator):
-        gradient_num = np.concatenate((gradient_point_num, [gradient_length_num], gradient_theta_num),
-                                      axis=0)
+    def inner_loop_update_bfgs(self, gradient_num, beta_k_inv):
+        Identity = np.eye(len(gradient_num))
         step_size = const.STEPSIZE
         search_direction = -beta_k_inv @ gradient_num
         search_direction /= np.linalg.norm(search_direction)
         step_size = self.wolfe_conditions(search_direction, gradient_num, step_size)
+        theta_next, length_next, point_next = self.update_variables(step_size, search_direction)
+        s_k = OptimizationObjectBFGS.get_variables(theta_next, length_next,
+                                                   point_next) - OptimizationObjectBFGS.get_variables(self.theta,
+                                                                                                      self.length,
+                                                                                                      self.point)
+        next_gradient = self.get_gradient(theta_next, length_next, point_next)
+        y_k = next_gradient - gradient_num
+        rho_k = 1 / (y_k.T @ s_k)
+        beta_k_plus_1_inv = ((Identity - rho_k * np.outer(y_k, s_k.T)) @
+                             beta_k_inv @ (Identity - rho_k * np.outer(s_k, y_k.T))
+                             + rho_k * np.outer(y_k, y_k.T))
 
-        # self.display_information(iterator, step_size, gradient_num)
+        return beta_k_plus_1_inv, theta_next, length_next, point_next
 
     def display_information(self, iterator, step_size, gradient_num):
         if iterator % 10 == 0:
-            self.print_objective_information(iterator, step_size, gradient_num)
+            self.print_objective_information(iterator, step_size)
             #           self.compare_radon_transforms(iterator)
 
             if iterator % 10 == 0:
@@ -138,14 +164,14 @@ class OptimizationObjectBFGS:
             plt.legend()
             plt.show()
 
-    def print_objective_information(self, iterator, step_size, gradient_num):
+    def print_objective_information(self, iterator, gradient_num):
         print("Iterator:", iterator)
-        print("Objective value: ", self.objective_function())
-        print("Objective value first term: ", self.objective_function_first_term(0))
-        print("Objective value energy term: ", self.objective_function_energy_term())
-        print("Objective value penalty term: ", self.objective_function_penalty_term())
+        print("Objective value: ", self.objective_function(self.theta, self.length, self.point))
+        print("Objective value first term: ",
+              self.objective_function_first_term(0, self.theta, self.length, self.point))
+        print("Objective value energy term: ", self.objective_function_energy_term(self.theta))
+        print("Objective value penalty term: ", self.objective_function_penalty_term(self.theta))
         print("Norm Gradient numerical: ", np.linalg.norm(gradient_num))
-        print("Step size:", step_size)
 
     def update_gamma(self):
         self.gamma = func.calculate_entire_gamma_from_theta(self.theta, self.point, self.length)
@@ -215,7 +241,7 @@ class OptimizationObjectBFGS:
         return np.array([der_p_x, der_p_y])
 
     def numerical_gradient_theta(self, theta, length, point):
-        derivatives = np.zeros(len(theta)-1)
+        derivatives = np.zeros(len(theta) - 1)
         former_obj = self.objective_function(theta, length, point)
         for i in range(const.N_TIME):
             derivatives[i] = self.numerical_derivative_theta_i(i, former_obj, deepcopy(theta), length, point)

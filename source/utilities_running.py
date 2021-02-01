@@ -1,5 +1,6 @@
 import numpy as np
 import optimization_object_gd as opt
+import optimization_object_bfgs as opt_bfgs
 import functions as func
 from skimage.transform import radon
 from constants import EXACT_RADON_TRANSFORM, N_TIME
@@ -40,7 +41,7 @@ def create_image_from_curve(entire_gamma, pixels, t_list):
     return img
 
 
-def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename):
+def problem_solver(problem_dictionary, opt_object):
     problem_dictionary["Initial Objective function"] = opt_object.objective_function()
     theta, length, point, iterator, obj_function = opt_object.gradient_descent()
     problem_dictionary["Theta reconstructed"] = theta
@@ -48,7 +49,26 @@ def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
     problem_dictionary["Length reconstructed"] = length
     problem_dictionary["Iterator"] = iterator
     problem_dictionary["Final Objective function"] = obj_function
+    return problem_dictionary
+
+
+def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename):
+    problem_dictionary = problem_solver(problem_dictionary, opt_object)
     np.save(filename[:-4] + "_after_idun", problem_dictionary, allow_pickle=True)
+    return problem_dictionary
+
+
+def test_bfgs_method(problem_dictionary, opt_object, filename):
+    problem_dictionary["Initial Objective function"] = opt_object.objective_function(opt_object.theta,
+                                                                                     opt_object.length,
+                                                                                     opt_object.point)
+    theta, length, point, iterator, obj_function = opt_object.bfgs()
+    problem_dictionary["Theta reconstructed"] = theta
+    problem_dictionary["Point reconstructed"] = point
+    problem_dictionary["Length reconstructed"] = length
+    problem_dictionary["Iterator"] = iterator
+    problem_dictionary["Final Objective function"] = obj_function
+    np.save(filename[:-4] + "_bfgs", problem_dictionary, allow_pickle=True)
     return problem_dictionary
 
 
@@ -64,10 +84,13 @@ def get_opt_object_from_problem_dictionary(problem_dictionary, max_iterator):
         radon_transform_py = radon(filled_radon_image, theta=[rad_to_deg(angle)], circle=True)
         angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
 
-    opt_object = opt.OptimizationObjectGD(problem_dictionary["Theta initial"], problem_dictionary["Length initial"],
-                                          problem_dictionary["Point initial"], problem_dictionary["Theta reference"],
-                                          gamma_solution, angle_to_exact_radon, problem_dictionary["Beta"],
-                                          problem_dictionary["Lambda"], problem_dictionary["C"], problem_dictionary["Tau"],
-                                          max_iterator)
+    opt_object = opt_bfgs.OptimizationObjectBFGS(problem_dictionary["Theta initial"],
+                                                 problem_dictionary["Length initial"],
+                                                 problem_dictionary["Point initial"],
+                                                 problem_dictionary["Theta reference"],
+                                                 gamma_solution, angle_to_exact_radon, problem_dictionary["Beta"],
+                                                 problem_dictionary["Lambda"], problem_dictionary["C"], 0.9,
+                                                 problem_dictionary["Tau"],
+                                                 max_iterator)
 
     return opt_object
