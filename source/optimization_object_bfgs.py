@@ -98,15 +98,17 @@ class OptimizationObjectBFGS:
     def bfgs(self):
         func.draw_boundary(self.gamma, self.gamma_ref, -1, const.PIXELS)
         iterator = 0
+        total_iterator = []
         quadratic_penalty = const.PENALTY_TOL + 1
         while quadratic_penalty > const.PENALTY_TOL and self.lamda < const.MAX_LAMDA:
             #print("Lambda: ", self.lamda)
             iterator = self.bfgs_to_convergence_m(iterator)
             #print(const.ITERATOR, iterator)
+            total_iterator.append([iterator, self.lamda])
             self.lamda *= 10
             quadratic_penalty = self.quadratic_penalty_term(self.theta)
             iterator = 0
-        return self.theta, self.length, self.point, iterator, \
+        return self.theta, self.length, self.point, total_iterator, \
                self.objective_function(self.theta, self.length, self.point)
 
     def bfgs_to_convergence_m(self, iterator):

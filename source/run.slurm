@@ -5,8 +5,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=8
 #SBATCH --mem=12000
-#SBATCH --job-name="few_iterations"
-#SBATCH --output=few_iterations.out
+#SBATCH --job-name="Example_bump_not_created"
+#SBATCH --output=Example_bump_not_created.out
 #SBATCH --mail-user=erikob@stud.ntnu.no
 #SBATCH --mail-type=ALL
 
