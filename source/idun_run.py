@@ -4,7 +4,7 @@ import constants as const
 
 
 max_iterator = 2
-filename = "Problems/Example_bump_not_created.npy"
+filename = "Problems/Circle_test_well_approximation.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 problem_dictionary["Epsilon for derivative"] = const.EPSILON
 problem_dictionary["Delta for heaviside"] = const.DELTA
