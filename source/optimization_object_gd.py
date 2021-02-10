@@ -26,7 +26,7 @@ class OptimizationObjectGD:
         self.max_iterator = max_iterator
 
     def armijo_backtracking(self, gradient, gradient_theta, gradient_length, gradient_point, step_size):
-        m = -np.linalg.norm(gradient)
+        m = -np.linalg.norm(gradient) ** 2
         current_obj_function = self.objective_function()
         self.theta[:-1] -= step_size * gradient_theta
         self.theta[-1] = self.theta[0] + 2 * np.pi
@@ -47,7 +47,7 @@ class OptimizationObjectGD:
     def gradient_descent(self):
         func.draw_boundary(self.gamma, self.gamma_ref, -1, const.PIXELS)
         iterator = 0
-        iterator = self.gradient_descent_to_convergence_point(iterator)
+        # iterator = self.gradient_descent_to_convergence_point(iterator)
         print(const.ITERATOR, iterator)
         quadratic_penalty = const.PENALTY_TOL + 1
         while quadratic_penalty > const.PENALTY_TOL and self.lamda < const.MAX_LAMDA:
@@ -115,10 +115,10 @@ class OptimizationObjectGD:
         step_size = self.armijo_backtracking(gradient_num, gradient_theta_num, gradient_length_num,
                                              gradient_point_num, step_size)
 
-        #self.display_information(iterator, step_size, gradient_num)
+        self.display_information(iterator, step_size, gradient_num)
 
     def display_information(self, iterator, step_size, gradient_num):
-        if iterator % 10 == 0:
+        if iterator % 1 == 0:
             self.print_objective_information(iterator, step_size, gradient_num)
             #           self.compare_radon_transforms(iterator)
 
@@ -343,7 +343,8 @@ class OptimizationObjectGD:
         gamma_der_diff_theta = func.der_gamma_diff_theta(self.theta, self.length)
         derivatives = OptimizationObjectGD.calc_derivative_d_diff_theta_given_alphas(differences_from_exact, alphas,
                                                                                      basis_vector,
-                                                                                     basis_vector_orthogonal, self.gamma,
+                                                                                     basis_vector_orthogonal,
+                                                                                     self.gamma,
                                                                                      self.gamma_der,
                                                                                      gamma_diff_theta,
                                                                                      gamma_der_diff_theta)

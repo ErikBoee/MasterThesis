@@ -61,3 +61,7 @@ K
 +source/Problems/Good_example_after_idun.npy,c/7/c764b393ff8e057f268664820fb4a375d72a825a
 I
 source/visualize_radon.py,0/7/07c0fea8312db22a95947947bc3148bb0bef90b1
+P
+ source/optimization_object_gd.py,8/4/84f0541ef397facdb101e4b580daaf003cf9ec9a
+R
+"source/optimization_object_bfgs.py,7/a/7a1142dd6b922313172aaa235bfb7ec170b6c0fc

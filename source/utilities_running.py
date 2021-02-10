@@ -72,18 +72,8 @@ def test_bfgs_method(problem_dictionary, opt_object, filename):
     return problem_dictionary
 
 
-def get_opt_object_from_problem_dictionary(problem_dictionary, max_iterator):
-    gamma_solution = func.calculate_entire_gamma_from_theta(problem_dictionary["Theta solution"],
-                                                            problem_dictionary["Point solution"],
-                                                            problem_dictionary["Length solution"]
-                                                            )
-    angle_to_exact_radon = {}
-    for angle in problem_dictionary["Angles"]:
-        filled_radon_image = create_image_from_curve(gamma_solution, problem_dictionary["Pixels"],
-                                                     np.linspace(0, 1, N_TIME + 1))
-        radon_transform_py = radon(filled_radon_image, theta=[rad_to_deg(angle)], circle=True)
-        angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
-
+def get_opt_object_from_problem_dictionary_bfgs(problem_dictionary, max_iterator):
+    angle_to_exact_radon, gamma_solution = get_opt_object_from_problem_dictionary(problem_dictionary)
     opt_object = opt_bfgs.OptimizationObjectBFGS(problem_dictionary["Theta initial"],
                                                  problem_dictionary["Length initial"],
                                                  problem_dictionary["Point initial"],
@@ -94,3 +84,32 @@ def get_opt_object_from_problem_dictionary(problem_dictionary, max_iterator):
                                                  max_iterator)
 
     return opt_object
+
+
+def get_opt_object_from_problem_dictionary_gd(problem_dictionary, max_iterator):
+    angle_to_exact_radon, gamma_solution = get_opt_object_from_problem_dictionary(problem_dictionary)
+
+    opt_object = opt.OptimizationObjectGD(problem_dictionary["Theta initial"],
+                                          problem_dictionary["Length initial"],
+                                          problem_dictionary["Point initial"],
+                                          problem_dictionary["Theta reference"],
+                                          gamma_solution, angle_to_exact_radon, problem_dictionary["Beta"],
+                                          problem_dictionary["Lambda"], problem_dictionary["C"],
+                                          problem_dictionary["Tau"],
+                                          max_iterator)
+
+    return opt_object
+
+
+def get_opt_object_from_problem_dictionary(problem_dictionary):
+    gamma_solution = func.calculate_entire_gamma_from_theta(problem_dictionary["Theta solution"],
+                                                            problem_dictionary["Point solution"],
+                                                            problem_dictionary["Length solution"]
+                                                            )
+    angle_to_exact_radon = {}
+    for angle in problem_dictionary["Angles"]:
+        filled_radon_image = create_image_from_curve(gamma_solution, problem_dictionary["Pixels"],
+                                                     np.linspace(0, 1, N_TIME + 1))
+        radon_transform_py = radon(filled_radon_image, theta=[rad_to_deg(angle)], circle=True)
+        angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
+    return angle_to_exact_radon, gamma_solution
