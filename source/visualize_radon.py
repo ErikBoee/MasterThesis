@@ -40,19 +40,19 @@ def visualize_problem(problem_dictionary):
                                                    np.zeros(len(radon_transform_reconstructed)))
         print(radon_transform_reconstructed)
         plt.figure(figsize=[11, 5])
-        #plt.title("Radon transform, angle = " + str(round(rad_to_deg(angle))), fontsize=24)
+        plt.title("Radon transform, angle = " + str(round(rad_to_deg(angle))), fontsize=24)
         plt.plot(np.linspace(0, pixels, pixels), radon_transform_reconstructed, color='red',
                  label="Reconstructed")
         plt.plot(np.linspace(0, pixels, pixels), radon_transform_py, label="Solution", color='navy')
         plt.xticks(fontsize=30)
         plt.yticks(fontsize=30)
         plt.legend(frameon=False, fontsize=28 ) #, loc = 'upper')
-        plt.savefig("Figures/Radon_transforms/Example_bump_not_created_after_idun" + str(round(rad_to_deg(
-            angle))) + ".pdf")
+        #plt.savefig("Figures/Radon_transforms/Circle_test_well_approximation_bfgs" + str(round(rad_to_deg(
+            #angle))) + ".pdf")
         plt.show()
 
 
-filename = "Problems/Example_bump_not_created_after_idun.npy"
+filename = "Problems/Circle_test_well_approximation_bfgs.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 print(problem_dictionary)
 visualize_problem(problem_dictionary)

@@ -32,6 +32,7 @@ def visualize_problem(problem_dictionary):
 
     plt.figure(figsize=[8, 6])
     plt.plot(initial_gamma[:, 0], initial_gamma[:, 1], label="Initial guess", color="dodgerblue")
+    plt.scatter(initial_gamma[0, 0], initial_gamma[0, 1], s=70, color="black")
     # plt.plot(reference_gamma[:, 0], reference_gamma[:, 1], '--', label="Reference", color="dodgerblue", )
     plt.plot(reconstructed_gamma[:, 0], reconstructed_gamma[:, 1], color='red', label="Reconstructed")
     plt.plot(solution_gamma[:, 0], solution_gamma[:, 1], label="Solution", color='navy')
@@ -67,9 +68,9 @@ def visualize_angles(problem_dictionary):
     plt.show()
 
 
-filename = "Problems/Example_bump_not_created_bfgs.npy"
+filename = "Problems/Circle_test_well_approximation_bfgs.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 print(problem_dictionary)
 visualize_problem(problem_dictionary)
-visualize_angles(problem_dictionary)
+# visualize_angles(problem_dictionary)
 print(problem_dictionary["Angles"] * 180 / np.pi)

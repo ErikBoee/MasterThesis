@@ -116,7 +116,7 @@ class OptimizationObjectBFGS:
         count = 0
         beta_k_inv = np.eye(len(self.theta) + 2)
         while (abs(former_obj - self.objective_function(self.theta, self.length, self.point))
-               > const.TOL or count < 3) \
+               > const.TOL or count < 5) \
                 and iterator < self.max_iterator:
             former_obj = self.objective_function(self.theta, self.length, self.point)
             gradient_num = self.get_gradient(self.theta, self.length, self.point)
