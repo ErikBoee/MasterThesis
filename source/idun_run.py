@@ -5,6 +5,7 @@ import constants as const
 
 max_iterator = 2
 filename = "Problems/Circle_test_well_approximation.npy"
+ending = "bfgs_tol_lowered"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 problem_dictionary["Epsilon for derivative"] = const.EPSILON
 problem_dictionary["Delta for heaviside"] = const.DELTA
@@ -16,7 +17,7 @@ problem_dictionary["Tolerance penalty"] = const.PENALTY_TOL
 problem_dictionary["Max lambda"] = const.MAX_LAMDA
 problem_dictionary["Lambda"] = const.LAMDA
 opt_object = ur.get_opt_object_from_problem_dictionary_bfgs(problem_dictionary, max_iterator)
-ur.test_bfgs_method(problem_dictionary, opt_object, filename)
+ur.test_bfgs_method(problem_dictionary, opt_object, filename, ending)
 
 
 

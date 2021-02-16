@@ -58,7 +58,7 @@ def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
     return problem_dictionary
 
 
-def test_bfgs_method(problem_dictionary, opt_object, filename):
+def test_bfgs_method(problem_dictionary, opt_object, filename, ending):
     problem_dictionary["Initial Objective function"] = opt_object.objective_function(opt_object.theta,
                                                                                      opt_object.length,
                                                                                      opt_object.point)
@@ -68,7 +68,7 @@ def test_bfgs_method(problem_dictionary, opt_object, filename):
     problem_dictionary["Length reconstructed"] = length
     problem_dictionary["Iterator"] = iterator
     problem_dictionary["Final Objective function"] = obj_function
-    np.save(filename[:-4] + "_bfgs", problem_dictionary, allow_pickle=True)
+    np.save(filename[:-4] + ending, problem_dictionary, allow_pickle=True)
     return problem_dictionary
 
 
