@@ -192,11 +192,16 @@ def heaviside_cont_analytic(x, delta):
 
 
 def draw_boundary(gamma, gamma_ref, iterator, pixels):
+    boundary_image = get_boundary_image(gamma, gamma_ref, pixels)
+    cv2.imwrite(str(pixels) + "_x_" + str(pixels) + "_" + str(iterator) + "_boundary.png", boundary_image)
+
+
+def get_boundary_image(gamma, gamma_ref, pixels):
     boundary_image = np.zeros((pixels, pixels, 3), np.uint8)
     for gamma_value in gamma:
         if -1 < int(gamma_value[0]) < pixels and -1 < int(gamma_value[1]) < pixels:
             boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [255, 255, 255]
     for gamma_value in gamma_ref:
-        boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [0, 255, 255]
+        boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [0, 0, 255]
 
-    cv2.imwrite(str(pixels) + "_x_" + str(pixels) + "_" + str(iterator) + "_boundary.png", boundary_image)
+    return boundary_image

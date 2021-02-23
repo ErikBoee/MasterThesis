@@ -68,7 +68,7 @@ def visualize_angles(problem_dictionary):
     plt.show()
 
 
-filename = "Problems/Circle_test_well_approximation_bfgs.npy"
+filename = "Problems/Poor_regularization_after_idun.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 print(problem_dictionary)
 visualize_problem(problem_dictionary)

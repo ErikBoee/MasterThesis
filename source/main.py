@@ -24,7 +24,7 @@ problem_dictionary = {
     "Delta for heaviside": const.DELTA,
     "N time": const.N_TIME,
     "Pixels": const.PIXELS,
-    "C": const.C,
+    "C": const.C_1,
     "Tau": const.TAU,
     "Step size": const.STEPSIZE,
     "Tolerance": const.TOL,
@@ -33,13 +33,15 @@ problem_dictionary = {
     "Max lambda": const.MAX_LAMDA
 }
 
-filename = "Good_example_bfgs"
-max_iterator = 100
+filename = "Circle_not_fine_grid_update_reference"
+max_iterator = 50
+image_frequency = 10
+name = "Test_iterative_approach"
 if __name__ == '__main__':
     if not path.exists(filename + ".npy"):
-        opt_object = opt_bfgs.OptimizationObjectGD(init_theta, init_length, init_point, theta_ref,
-                                                 gamma_solution, angle_to_exact_radon, beta, lamda, const.C, const.TAU,
-                                                 max_iterator)
+        opt_object = opt_bfgs.OptimizationObjectBFGS(init_theta, init_length, init_point, theta_ref,
+                                                     gamma_solution, angle_to_exact_radon, beta, lamda, const.C_1, const.C_2, const.TAU,
+                                                     max_iterator, image_frequency, name)
         ur.update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
 
     else:

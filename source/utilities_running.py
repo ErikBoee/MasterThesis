@@ -4,6 +4,7 @@ import optimization_object_bfgs as opt_bfgs
 import functions as func
 from skimage.transform import radon
 from constants import EXACT_RADON_TRANSFORM, N_TIME
+import constants as const
 import numba
 from numba import njit
 
@@ -42,8 +43,10 @@ def create_image_from_curve(entire_gamma, pixels, t_list):
 
 
 def problem_solver(problem_dictionary, opt_object):
-    problem_dictionary["Initial Objective function"] = opt_object.objective_function()
-    theta, length, point, iterator, obj_function = opt_object.gradient_descent()
+    problem_dictionary["Initial Objective function"] = opt_object.objective_function(opt_object.theta,
+                                                                                     opt_object.length,
+                                                                                     opt_object.point)
+    theta, length, point, iterator, obj_function = opt_object.bfgs()
     problem_dictionary["Theta reconstructed"] = theta
     problem_dictionary["Point reconstructed"] = point
     problem_dictionary["Length reconstructed"] = length
@@ -58,32 +61,48 @@ def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
     return problem_dictionary
 
 
-def test_bfgs_method(problem_dictionary, opt_object, filename, ending):
+def test_bfgs_method(problem_dictionary, opt_object, new_folder_name, folder_path):
     problem_dictionary["Initial Objective function"] = opt_object.objective_function(opt_object.theta,
                                                                                      opt_object.length,
                                                                                      opt_object.point)
-    theta, length, point, iterator, obj_function = opt_object.bfgs()
+    theta, length, point, iterator, obj_function = opt_object.bfgs(folder_path)
     problem_dictionary["Theta reconstructed"] = theta
     problem_dictionary["Point reconstructed"] = point
     problem_dictionary["Length reconstructed"] = length
     problem_dictionary["Iterator"] = iterator
     problem_dictionary["Final Objective function"] = obj_function
-    np.save(filename[:-4] + ending, problem_dictionary, allow_pickle=True)
+    np.save(new_folder_name + "/" + new_folder_name, problem_dictionary, allow_pickle=True)
     return problem_dictionary
 
 
-def get_opt_object_from_problem_dictionary_bfgs(problem_dictionary, max_iterator):
+def get_opt_object_from_problem_dictionary_bfgs(problem_dictionary, max_iterator, image_frequency):
     angle_to_exact_radon, gamma_solution = get_opt_object_from_problem_dictionary(problem_dictionary)
     opt_object = opt_bfgs.OptimizationObjectBFGS(problem_dictionary["Theta initial"],
                                                  problem_dictionary["Length initial"],
                                                  problem_dictionary["Point initial"],
                                                  problem_dictionary["Theta reference"],
                                                  gamma_solution, angle_to_exact_radon, problem_dictionary["Beta"],
-                                                 problem_dictionary["Lambda"], problem_dictionary["C"], 0.9,
+                                                 problem_dictionary["Lambda"], problem_dictionary["C_1"],
+                                                 problem_dictionary["C_2"],
                                                  problem_dictionary["Tau"],
-                                                 max_iterator)
+                                                 max_iterator, image_frequency)
 
     return opt_object
+
+
+def update_problem(problem_dictionary, angles):
+    problem_dictionary["Epsilon for derivative"] = const.EPSILON
+    problem_dictionary["Delta for heaviside"] = const.DELTA
+    problem_dictionary["N time"] = const.N_TIME
+    problem_dictionary["Pixels"] = const.PIXELS
+    problem_dictionary["Step size"]: const.STEPSIZE
+    problem_dictionary["Tolerance"] = const.TOL
+    problem_dictionary["Tolerance penalty"] = const.PENALTY_TOL
+    problem_dictionary["Max lambda"] = const.MAX_LAMDA
+    problem_dictionary["Lambda"] = const.LAMDA
+    problem_dictionary["Beta"] = const.BETA
+    problem_dictionary["Angles"] = angles
+    return problem_dictionary
 
 
 def get_opt_object_from_problem_dictionary_gd(problem_dictionary, max_iterator):
@@ -102,6 +121,7 @@ def get_opt_object_from_problem_dictionary_gd(problem_dictionary, max_iterator):
 
 
 def get_opt_object_from_problem_dictionary(problem_dictionary):
+    print(problem_dictionary["Theta solution"])
     gamma_solution = func.calculate_entire_gamma_from_theta(problem_dictionary["Theta solution"],
                                                             problem_dictionary["Point solution"],
                                                             problem_dictionary["Length solution"]

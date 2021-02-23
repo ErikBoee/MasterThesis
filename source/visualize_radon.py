@@ -18,7 +18,7 @@ font_cursive = {'family': font_style, 'style': 'italic',
 mpl.rc('font', **font)
 
 
-def visualize_problem(problem_dictionary):
+def visualize_radon(problem_dictionary):
     reconstructed_gamma = func.calculate_entire_gamma_from_theta(problem_dictionary["Theta reconstructed"],
                                                                  problem_dictionary["Point reconstructed"],
                                                                  problem_dictionary["Length reconstructed"])
@@ -52,8 +52,8 @@ def visualize_problem(problem_dictionary):
         plt.show()
 
 
-filename = "Problems/Circle_test_well_approximation_bfgs.npy"
+filename = "Problems/Circle_test_not_approximatingtest_on_computer.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 print(problem_dictionary)
-visualize_problem(problem_dictionary)
+visualize_radon(problem_dictionary)
 print(problem_dictionary["Angles"] * 180 / np.pi)
