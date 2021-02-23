@@ -1,0 +1,4 @@
+/lustre1/work/erikob/optimization/lib/python3.6/site-packages/skimage/transform/radon_transform.py:87: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray
+  coords = np.array(np.ogrid[:image.shape[0], :image.shape[1]])
+/lustre1/work/erikob/MasterThesis/source/functions.py:158: NumbaPerformanceWarning: np.dot() is faster on contiguous arrays, called on (array(float64, 1d, A), array(float64, 1d, C))
+  radons[i] = integrate_for_radon(gamma_vector, gamma_der_vector, alphas[i], basis_vector)
