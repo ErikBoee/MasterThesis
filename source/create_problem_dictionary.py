@@ -28,7 +28,7 @@ problem_dictionary = {
     "Max lambda": const.MAX_LAMDA
 }
 
-filename = "Problems/Circle_not_fine_grid_update_reference"
+filename = "Problems/Bump_new_problem"
 
 if not path.exists(filename):
-    np.save(filename, problem_dictionary, allow_pickle=True)
+ np.save(filename, problem_dictionary, allow_pickle=True)

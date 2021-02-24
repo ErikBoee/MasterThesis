@@ -6,10 +6,10 @@ import svgpathtools as svg
 import utilities_running as ur
 
 # Import the curves from svg file
-curves, _ = svg.svg2paths('../test/Circle_not_approximating/circle.svg')
+curves, _ = svg.svg2paths('../test/Even_better_attempt_bump/star_shaped_reference.svg')
 c_ref = curves[0]
 
-curves, _ = svg.svg2paths('../test/Circle_not_approximating/circle_edit_3.svg')
+curves, _ = svg.svg2paths('../test/Even_better_attempt_bump/star_shaped_test_2.svg')
 c_sol = curves[0]
 n = N_TIME
 t_ref = np.array([svg.path.inv_arclength(c_ref, s) for s in np.linspace(0, c_ref.length(), n + 1)])
@@ -32,7 +32,7 @@ point_ref = np.array([PIXELS / 2, PIXELS / 2])
 length_ref = np.pi * radius
 point_sol = point_ref
 length_sol = length_ref
-angles = np.linspace(0, np.pi, 16)
+angles = np.linspace(0, np.pi, 8)
 angles = angles[:-1]
 
 init_theta = theta_ref
