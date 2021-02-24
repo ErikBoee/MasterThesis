@@ -61,7 +61,7 @@ def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
     return problem_dictionary
 
 
-def test_bfgs_method(problem_dictionary, opt_object, new_folder_name, folder_path):
+def test_bfgs_method(problem_dictionary, opt_object, new_file_name, folder_path):
     problem_dictionary["Initial Objective function"] = opt_object.objective_function(opt_object.theta,
                                                                                      opt_object.length,
                                                                                      opt_object.point)
@@ -71,7 +71,7 @@ def test_bfgs_method(problem_dictionary, opt_object, new_folder_name, folder_pat
     problem_dictionary["Length reconstructed"] = length
     problem_dictionary["Iterator"] = iterator
     problem_dictionary["Final Objective function"] = obj_function
-    np.save(new_folder_name + "/" + new_folder_name, problem_dictionary, allow_pickle=True)
+    np.save(new_file_name, problem_dictionary, allow_pickle=True)
     return problem_dictionary
 
 
@@ -121,7 +121,6 @@ def get_opt_object_from_problem_dictionary_gd(problem_dictionary, max_iterator):
 
 
 def get_opt_object_from_problem_dictionary(problem_dictionary):
-    print(problem_dictionary["Theta solution"])
     gamma_solution = func.calculate_entire_gamma_from_theta(problem_dictionary["Theta solution"],
                                                             problem_dictionary["Point solution"],
                                                             problem_dictionary["Length solution"]
