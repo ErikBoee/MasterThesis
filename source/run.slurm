@@ -5,8 +5,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=8
 #SBATCH --mem=12000
-#SBATCH --job-name="Circle_reg"
-#SBATCH --output=Circle_reg.out
+#SBATCH --job-name="Bump_new"
+#SBATCH --output=Bump_new.out
 #SBATCH --mail-user=erikob@stud.ntnu.no
 #SBATCH --mail-type=ALL
 

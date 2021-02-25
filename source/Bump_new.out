@@ -1,0 +1,16 @@
+/lustre1/work/erikob/optimization/lib/python3.6/site-packages/skimage/transform/radon_transform.py:87: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray
+  coords = np.array(np.ogrid[:image.shape[0], :image.shape[1]])
+/lustre1/work/erikob/MasterThesis/source/functions.py:158: NumbaPerformanceWarning: np.dot() is faster on contiguous arrays, called on (array(float64, 1d, A), array(float64, 1d, C))
+  radons[i] = integrate_for_radon(gamma_vector, gamma_der_vector, alphas[i], basis_vector)
+Traceback (most recent call last):
+  File "idun_run.py", line 16, in <module>
+    ur.test_bfgs_method(problem_dictionary, opt_object, new_folder_name, new_path)
+  File "/lustre1/work/erikob/MasterThesis/source/utilities_running.py", line 67, in test_bfgs_method
+    opt_object.point)
+  File "/lustre1/work/erikob/MasterThesis/source/optimization_object_bfgs.py", line 213, in objective_function
+    obj = self.objective_function_first_term(obj, theta, length, point)
+  File "/lustre1/work/erikob/MasterThesis/source/optimization_object_bfgs.py", line 227, in objective_function_first_term
+    theta, length, point)
+  File "/lustre1/work/erikob/MasterThesis/source/optimization_object_bfgs.py", line 259, in calc_radon_transform_minus_exact
+    func.radon_transform(gamma, gamma_der, angle, const.PIXELS) - exact_transform.T)
+ValueError: operands could not be broadcast together with shapes (300,) (1,200) 
