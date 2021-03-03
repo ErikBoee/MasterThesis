@@ -1,6 +1,6 @@
 import numpy as np
 N_TIME = 100
-PIXELS = 200
+PIXELS = 300
 N_ALPHAS = PIXELS
 EXACT_RADON_TRANSFORM = "exact_radon_transform"
 ALPHAS = "alphas"

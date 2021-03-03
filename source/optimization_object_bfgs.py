@@ -111,7 +111,7 @@ class OptimizationObjectBFGS:
             self.create_dict_and_save(iterator, j, folder_path)
             self.theta_ref = self.theta
             self.lamda = const.LAMDA
-            self.beta = self.beta*0.5
+            #self.beta = self.beta*0.5
         return self.theta, self.length, self.point, total_iterator, \
                self.objective_function(self.theta, self.length, self.point)
 
