@@ -102,20 +102,21 @@ class OptimizationObjectBFGS:
         quadratic_penalty = const.PENALTY_TOL + 1
         for j in range(const.NUMBER_OF_FULL_LOOPS):
             while quadratic_penalty > const.PENALTY_TOL and self.lamda < const.MAX_LAMDA:
-                iterator = self.bfgs_to_convergence_m(iterator, folder_path, j)
+                iterator = self.bfgs_to_convergence_m(iterator, j)
                 total_iterator.append([iterator, self.lamda])
                 self.lamda *= 10
                 quadratic_penalty = self.quadratic_penalty_term(self.theta)
                 iterator = 0
 
-            self.create_dict_and_save(iterator, j, folder_path)
-            self.theta_ref = self.theta
+            self.create_dict_and_save(iterator, j)
+            self.theta_ref = deepcopy(self.theta)
             self.lamda = const.LAMDA
+            quadratic_penalty = const.PENALTY_TOL + 1
             #self.beta = self.beta*0.5
         return self.theta, self.length, self.point, total_iterator, \
                self.objective_function(self.theta, self.length, self.point)
 
-    def create_dict_and_save(self, i, j, folder_path):
+    def create_dict_and_save(self, i, j):
         self.update_gamma()
         boundary_image = func.get_boundary_image(self.gamma, self.gamma_ref, const.PIXELS)
         cv2.imwrite("j_" + str(j) + "_lambda_" + str(self.lamda) + "_i_" + str(i) + ".png", boundary_image)
@@ -135,7 +136,7 @@ class OptimizationObjectBFGS:
         dikt["Point"] = self.point
         return dikt
 
-    def bfgs_to_convergence_m(self, iterator, folder_path, j):
+    def bfgs_to_convergence_m(self, iterator, j):
         former_obj = -2 * const.TOL
         count = 0
         beta_k_inv = np.eye(len(self.theta) + 2)
@@ -151,7 +152,7 @@ class OptimizationObjectBFGS:
                 count += 1
             iterator += 1
             if iterator % self.image_frequency == 0:
-                self.create_dict_and_save(iterator, j, folder_path)
+                self.create_dict_and_save(iterator, j)
                 # self.update_gamma()
                 # func.draw_boundary(self.gamma, self.gamma_ref, iterator, const.PIXELS)
                 # self.print_objective_information(iterator, gradient_num)
