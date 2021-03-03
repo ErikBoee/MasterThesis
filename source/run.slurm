@@ -5,8 +5,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=8
 #SBATCH --mem=12000
-#SBATCH --job-name="Bump_new"
-#SBATCH --output=Bump_new.out
+#SBATCH --job-name="Circle_not_fine_grid"
+#SBATCH --output=Circle_not.out
 #SBATCH --mail-user=erikob@stud.ntnu.no
 #SBATCH --mail-type=ALL
 
