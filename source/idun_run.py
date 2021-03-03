@@ -3,8 +3,8 @@ import utilities_running as ur
 import constants as const
 import os
 
-problem_dictionary_filename = "Problems/Bump_new_problem.npy"
-new_folder_name = "Bump_new_problem_idun"
+problem_dictionary_filename = "Problems/Circle_not_fine_grid_update_reference.npy"
+new_folder_name = "Circle_not_fine_grid_update_reference_idun_2"
 new_path = r'../source/' + new_folder_name
 if not os.path.exists(new_path):
     os.makedirs(new_path)
