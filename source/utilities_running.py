@@ -136,10 +136,7 @@ def get_opt_object_from_problem_dictionary(problem_dictionary):
 
     np.random.seed(1)
     for angle in angle_to_exact_radon.keys():
-        print(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0])
-        print(len(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0]))
         angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0] += np.random.normal(0, maximum * const.NOISE_SIZE, len(
             angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0]))
-        print(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0])
 
     return angle_to_exact_radon, gamma_solution
