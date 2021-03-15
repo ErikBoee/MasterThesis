@@ -131,7 +131,7 @@ def get_opt_object_from_problem_dictionary(problem_dictionary):
         filled_radon_image = create_image_from_curve(gamma_solution, problem_dictionary["Pixels"],
                                                      np.linspace(0, 1, N_TIME + 1))
         radon_transform_py = radon(filled_radon_image, theta=[rad_to_deg(angle)], circle=True)
-        maximum = np.max(maximum, np.max(abs(radon_transform_py)))
+        maximum = max(maximum, max(abs(radon_transform_py)))
         angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
 
     np.random.seed(1)
