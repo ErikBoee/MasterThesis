@@ -25,10 +25,11 @@ problem_dictionary = {
     "Tolerance": const.TOL,
     "Angles": angles,
     "Tolerance penalty": const.PENALTY_TOL,
-    "Max lambda": const.MAX_LAMDA
+    "Max lambda": const.MAX_LAMDA,
+    "Noise size": const.NOISE_SIZE
 }
 
-filename = "Problems/Bump_new_problem"
+filename = "Problems/Bump_new_problem_noise_" + str(const.NOISE_SIZE)
 
 if not path.exists(filename):
  np.save(filename, problem_dictionary, allow_pickle=True)

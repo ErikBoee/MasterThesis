@@ -87,3 +87,11 @@ y
 Isource/Circle_not_fine_grid_update_reference_idun/j_0_lambda_100_i_10.npy,0/8/087d510e2152a1b190dde446b43642e61d495483
 S
 #source/create_problem_dictionary.py,4/f/4f668866181aed56573db9af272ded26f40aa3de
+g
+7source/Bump_new_problem_idun/j_0_lambda_1000000_i_0.npy,b/2/b2cbb635af12830dd354ae493c9f293ff73dd4cb
+}
+Msource/Circle_not_fine_grid_update_reference_idun_2/j_0_lambda_1000_i_100.npy,8/7/8751712e444b0fb36cf874802578fdd98f2cda30
+Y
+)source/test_problem_with_new_reference.py,7/8/780921a4b90aee31ddfccbf86c627e24c55c8341
+f
+6source/Bump_new_problem_idun_3/j_0_lambda_100_i_10.npy,8/a/8ab8b7bc8d64439dc19a8e24a816230650e0fe4a

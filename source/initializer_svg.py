@@ -1,6 +1,6 @@
 import numpy as np
 import functions as func
-from constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA, LAMDA
+from constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA, LAMDA, NOISE_SIZE
 from skimage.transform import radon
 import svgpathtools as svg
 import utilities_running as ur
@@ -19,9 +19,8 @@ tangents_sol = np.array([c_sol.unit_tangent(t) for t in t_sol])
 
 theta_ref = np.angle(tangents_ref)
 theta_sol = np.angle(tangents_sol)
-theta_ref[-1] = theta_ref[0] + 2*np.pi
-theta_sol[-1] = theta_sol[0] + 2*np.pi
-
+theta_ref[-1] = theta_ref[0] + 2 * np.pi
+theta_sol[-1] = theta_sol[0] + 2 * np.pi
 
 beta = BETA
 lamda = LAMDA
@@ -39,7 +38,17 @@ init_theta = theta_ref
 gamma_solution = func.calculate_entire_gamma_from_theta(theta_sol, point_sol, length_sol)
 gamma_ref = func.calculate_entire_gamma_from_theta(theta_ref, point_ref, length_sol)
 angle_to_exact_radon = {}
+maximum = 0
 for angle in angles:
     filled_radon_image = ur.create_image_from_curve(gamma_solution, PIXELS, t_ref)
     radon_transform_py = radon(filled_radon_image, theta=[ur.rad_to_deg(angle)], circle=True)
+    maximum = max(maximum, max(abs(radon_transform_py)))
     angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
+
+np.random.seed(1)
+for angle in angle_to_exact_radon.keys():
+    print(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0])
+    print(len(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0]))
+    angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0] += np.random.normal(0, maximum * NOISE_SIZE, len(
+        angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0]))
+    print(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0])

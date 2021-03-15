@@ -126,9 +126,20 @@ def get_opt_object_from_problem_dictionary(problem_dictionary):
                                                             problem_dictionary["Length solution"]
                                                             )
     angle_to_exact_radon = {}
+    maximum = 0
     for angle in problem_dictionary["Angles"]:
         filled_radon_image = create_image_from_curve(gamma_solution, problem_dictionary["Pixels"],
                                                      np.linspace(0, 1, N_TIME + 1))
         radon_transform_py = radon(filled_radon_image, theta=[rad_to_deg(angle)], circle=True)
+        maximum = np.max(maximum, np.max(abs(radon_transform_py)))
         angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
+
+    np.random.seed(1)
+    for angle in angle_to_exact_radon.keys():
+        print(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0])
+        print(len(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0]))
+        angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0] += np.random.normal(0, maximum * const.NOISE_SIZE, len(
+            angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0]))
+        print(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0])
+
     return angle_to_exact_radon, gamma_solution
