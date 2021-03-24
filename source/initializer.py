@@ -8,7 +8,7 @@ beta = BETA
 radius = PIXELS / 3
 init_point = np.array([PIXELS / 2, PIXELS / 2 - radius])
 init_length = 2 * np.pi * radius
-point_ref = np.array([PIXELS / 2, PIXELS / 2 - radius/1.2])
+point_ref = np.array([PIXELS / 2, PIXELS / 2 - radius / 1.2])
 length_ref = 2 * np.pi * radius
 point_sol = point_ref
 length_sol = length_ref
@@ -22,7 +22,7 @@ def theta(tau):
 
 
 def calc_theta_ref(tau):
-    return 2 * np.pi * tau + 0.5 * np.sin(16 * np.pi * tau)
+    return 2 * np.pi * tau
 
 
 def calc_gamma_ref():
@@ -40,6 +40,28 @@ def der_theta_ref(tau):
 theta_ref = calc_theta_ref(t_n)
 init_theta = theta_ref
 gamma_ref = calc_gamma_ref()
+
+
+def length_squared(point_1, point_2):
+    return (point_1[0] - point_2[0]) ** 2 + (point_1[1] - point_2[1]) ** 2
+
+
+def geodesic_length_squared(length, gamma, i, j):
+    index_difference = min(abs(i - j), (min(i, j) + len(gamma) - 1 - max(i, j)))
+    return (index_difference * length / N_TIME) ** 2
+
+
+def mobius_energy(length, gamma):
+    integrand = 0
+    for i in range(len(gamma)):
+        for j in range(len(gamma)):
+            if i != j and abs((i - j)) != len(gamma) - 1:
+                integrand += 1 / length_squared(gamma[i], gamma[j]) - 1 / geodesic_length_squared(length, gamma, i, j)
+    return integrand / N_TIME**2 * length ** 2
+
+
+mobius = mobius_energy(length_ref, gamma_ref)
+print(mobius)
 theta_solution = theta(t_n)
 gamma_solution = func.calculate_entire_gamma_from_theta(theta_solution, point_sol, length_sol)
 angle_to_exact_radon = {}

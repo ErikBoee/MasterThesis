@@ -134,7 +134,7 @@ def get_opt_object_from_problem_dictionary(problem_dictionary):
         maximum = max(maximum, max(abs(radon_transform_py)))
         angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
 
-    np.random.seed(1)
+    np.random.seed(const.SEED)
     for angle in angle_to_exact_radon.keys():
         angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0] += np.random.normal(0, maximum * const.NOISE_SIZE, len(
             angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0]))

@@ -68,7 +68,7 @@ def visualize_angles(problem_dictionary):
     plt.show()
 
 
-filename = "Bump_new_problem_idun/Bump_new_problem_idun.npy"
+filename = "Bump_new_problem_idun_3/Bump_new_problem_idun_3.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 print(problem_dictionary)
 visualize_problem(problem_dictionary)

@@ -112,7 +112,7 @@ class OptimizationObjectBFGS:
             self.theta_ref = deepcopy(self.theta)
             self.lamda = const.LAMDA
             quadratic_penalty = const.PENALTY_TOL + 1
-            #self.beta = self.beta*0.5
+            # self.beta = self.beta*0.5
         return self.theta, self.length, self.point, total_iterator, \
                self.objective_function(self.theta, self.length, self.point)
 
@@ -134,13 +134,14 @@ class OptimizationObjectBFGS:
         dikt["Theta"] = self.theta
         dikt["Length"] = self.length
         dikt["Point"] = self.point
+        dikt["Mobius"] = self.mobius_energy(func.calculate_entire_gamma_from_theta(self.theta, self.point, self.length))
         return dikt
 
     def bfgs_to_convergence_m(self, iterator, j):
         former_obj = -2 * const.TOL
         count = 0
         beta_k_inv = np.eye(len(self.theta) + 2)
-        while (abs(former_obj - self.objective_function(self.theta, self.length, self.point))
+        while (abs(former_obj - self.objective_function(self.theta, self.length, self.point)) / former_obj
                > const.TOL or count < 5) \
                 and iterator < self.max_iterator:
             former_obj = self.objective_function(self.theta, self.length, self.point)
@@ -171,12 +172,15 @@ class OptimizationObjectBFGS:
                                                                                                       self.point)
         next_gradient = self.get_gradient(theta_next, length_next, point_next)
         y_k = next_gradient - gradient_num
-        rho_k = 1 / (y_k.T @ s_k)
-        beta_k_plus_1_inv = ((Identity - rho_k * np.outer(s_k, y_k.T)) @
-                             beta_k_inv @ (Identity - rho_k * np.outer(y_k, s_k.T))
-                             + rho_k * np.outer(s_k, s_k.T))
-
-        return beta_k_plus_1_inv, theta_next, length_next, point_next
+        if (y_k.T @ s_k) < const.STEPSIZE_TOL:
+            print("Too short stepsize")
+            return beta_k_inv, theta_next, length_next, point_next
+        else:
+            rho_k = 1 / (y_k.T @ s_k)
+            beta_k_plus_1_inv = ((Identity - rho_k * np.outer(s_k, y_k.T)) @
+                                 beta_k_inv @ (Identity - rho_k * np.outer(y_k, s_k.T))
+                                 + rho_k * np.outer(s_k, s_k.T))
+            return beta_k_plus_1_inv, theta_next, length_next, point_next
 
     def display_information(self, iterator, step_size, gradient_num):
         if iterator % 10 == 0:
@@ -203,6 +207,8 @@ class OptimizationObjectBFGS:
               self.objective_function_first_term(0, self.theta, self.length, self.point))
         print("Objective value energy term: ", self.objective_function_energy_term(self.theta))
         print("Objective value penalty term: ", self.objective_function_penalty_term(self.theta))
+        print("Mobius energy:",
+              self.mobius_energy(func.calculate_entire_gamma_from_theta(self.theta, self.point, self.length)))
         print("Norm Gradient numerical: ", np.linalg.norm(gradient_num))
 
     def update_gamma(self):
@@ -296,6 +302,24 @@ class OptimizationObjectBFGS:
         changed_obj = self.objective_function(theta, length + const.EPSILON, point)
         derivative = (changed_obj - former_obj) / const.EPSILON
         return derivative
+
+    def geodesic_length_squared(self, gamma, i, j):
+        index_difference = min(abs(i - j), (min(i, j) + len(gamma) - 1 - max(i, j)))
+        return (index_difference * self.length / const.N_TIME) ** 2
+
+    def mobius_energy(self, gamma):
+        integrand = 0
+        for i in range(len(gamma)):
+            for j in range(len(gamma)):
+                if i != j and abs((i - j)) != len(gamma) - 1:
+                    integrand += 1 / OptimizationObjectBFGS.length_squared(gamma[i],
+                                                                           gamma[j]) - 1 / self.geodesic_length_squared(
+                        gamma, i, j)
+        return integrand / const.N_TIME ** 2 * self.length ** 2
+
+    @staticmethod
+    def length_squared(point_1, point_2):
+        return (point_1[0] - point_2[0]) ** 2 + (point_1[1] - point_2[1]) ** 2
 
     def reset_gamma(self, actual_gamma, actual_gamma_der):
         self.gamma = actual_gamma

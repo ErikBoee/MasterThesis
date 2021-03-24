@@ -1,6 +1,6 @@
 import numpy as np
 import functions as func
-from constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA, LAMDA, NOISE_SIZE
+from constants import N_TIME, PIXELS, EXACT_RADON_TRANSFORM, BETA, LAMDA, NOISE_SIZE, SEED
 from skimage.transform import radon
 import svgpathtools as svg
 import utilities_running as ur
@@ -31,7 +31,7 @@ point_ref = np.array([PIXELS / 2, PIXELS / 2])
 length_ref = np.pi * radius
 point_sol = point_ref
 length_sol = length_ref
-angles = np.linspace(0, np.pi, 8)
+angles = np.linspace(0, np.pi, 4)
 angles = angles[:-1]
 
 init_theta = theta_ref
@@ -45,7 +45,7 @@ for angle in angles:
     maximum = max(maximum, max(abs(radon_transform_py)))
     angle_to_exact_radon[angle] = {EXACT_RADON_TRANSFORM: radon_transform_py}
 
-np.random.seed(1)
+np.random.seed(SEED)
 for angle in angle_to_exact_radon.keys():
     print(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0])
     print(len(angle_to_exact_radon[angle][EXACT_RADON_TRANSFORM][:, 0]))

@@ -52,7 +52,7 @@ def visualize_radon(problem_dictionary):
         plt.show()
 
 
-filename = "Problems/Circle_test_not_approximatingtest_on_computer.npy"
+filename = "Circle_not_fine_grid_update_reference_noise0.05/Circle_not_fine_grid_update_reference_noise0.05.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 print(problem_dictionary)
 visualize_radon(problem_dictionary)

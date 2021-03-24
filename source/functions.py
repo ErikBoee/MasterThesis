@@ -94,7 +94,6 @@ def calculate_entire_gamma(t_n, point, length):
     entire_gamma[1:] = np.add(point, cum_sum_vector)
     return entire_gamma
 
-
 def calculate_entire_gamma_from_theta(theta, point, length):
     entire_gamma = np.zeros((len(theta), 2))
     entire_gamma[0] = point
