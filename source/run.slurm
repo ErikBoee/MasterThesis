@@ -10,8 +10,8 @@
 #SBATCH --mail-user=erikob@stud.ntnu.no
 #SBATCH --mail-type=ALL
 
-module load GCCcore/.7.3.0
-module load Python/3.6.6
-source ../../optimization/bin/activate
+module load GCCcore/8.3.0
+module load Python/3.7.4-GCCcore-8.3.0
+source ../../optimization_idun_4/bin/activate
 
 python3 idun_run.py
