@@ -172,7 +172,7 @@ class OptimizationObjectBFGS:
                                                                                                       self.point)
         next_gradient = self.get_gradient(theta_next, length_next, point_next)
         y_k = next_gradient - gradient_num
-        if (y_k.T @ s_k) < const.STEPSIZE_TOL:
+        if abs(y_k.T @ s_k) < const.STEPSIZE_TOL:
             print("Too short stepsize")
             return beta_k_inv, theta_next, length_next, point_next
         else:
