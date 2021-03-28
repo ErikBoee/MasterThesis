@@ -9,8 +9,8 @@ new_path = r'../source/' + new_folder_name
 if not os.path.exists(new_path):
     os.makedirs(new_path)
 directory = new_path
-max_iterator = 1
-image_frequency = 1
+max_iterator = 100
+image_frequency = 10
 problem_dictionary = np.load(problem_dictionary_filename, allow_pickle=True).item()
 opt_object = ur.get_opt_object_from_problem_dictionary_bfgs(problem_dictionary, max_iterator, image_frequency)
 ur.test_bfgs_method(problem_dictionary, opt_object, new_folder_name, new_path)
