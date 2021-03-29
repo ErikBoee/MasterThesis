@@ -97,7 +97,7 @@ def calculate_entire_gamma(t_n, point, length):
 def calculate_entire_gamma_from_theta(theta, point, length):
     entire_gamma = np.zeros((len(theta), 2))
     entire_gamma[0] = point
-    n = len(theta) - 1
+    n = len(theta)-1
     cos_theta_vector = np.multiply(length / (2 * n), np.cos(theta))
     sin_theta_vector = np.multiply(length / (2 * n), np.sin(theta))
     cos_sum_vector = cos_theta_vector[:n] + cos_theta_vector[1:]
@@ -199,8 +199,9 @@ def get_boundary_image(gamma, gamma_ref, pixels):
     boundary_image = np.zeros((pixels, pixels, 3), np.uint8)
     for gamma_value in gamma:
         if -1 < int(gamma_value[0]) < pixels and -1 < int(gamma_value[1]) < pixels:
-            boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [255, 255, 255]
+            boundary_image[round(gamma_value[0]), round(gamma_value[1])] = [255, 255, 255]
+
     for gamma_value in gamma_ref:
-        boundary_image[int(gamma_value[0]), int(gamma_value[1])] = [0, 0, 255]
+        boundary_image[round(gamma_value[0]), round(gamma_value[1])] = [0, 0, 255]
 
     return boundary_image
