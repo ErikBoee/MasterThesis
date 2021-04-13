@@ -1,9 +1,9 @@
 import numpy as np
 from copy import deepcopy
-from source.initializer import beta, theta_ref, angle_to_exact_radon, \
+from source.initializer import beta, angle_to_exact_radon, \
     gamma_ref, init_point, init_length, init_theta, theta_solution
-import source.derivatives as der
-import source.optimization_object_gd as opt
+import derivatives as der
+import optimization_object_gd as opt
 import source.constants as const
 import source.functions as func
 
