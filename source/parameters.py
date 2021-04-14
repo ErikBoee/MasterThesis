@@ -8,7 +8,7 @@ MAX_LAMDA = 1000000
 C_1 = 0.001
 C_2 = 0.9
 TAU = 0.1
-BETA = 0.5
+BETA = 5
 NOISE_SIZE = 0.0
 
 #Run
