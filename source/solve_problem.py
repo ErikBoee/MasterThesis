@@ -10,6 +10,9 @@ new_path = '../source/Runs_finished/' + new_folder_name
 if not os.path.exists(new_path):
     os.makedirs(new_path)
     print("Created path", new_path)
+else:
+    os.makedirs(new_path + "_strange")
+    print("Strange")
 
 directory = new_path
 max_iterator = pm.MAX_ITER_BFGS
