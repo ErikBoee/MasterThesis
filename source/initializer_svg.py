@@ -2,12 +2,12 @@ import numpy as np
 from constants import N_TIME, PIXELS
 import svgpathtools as svg
 
-problem_name = 'Circle_poor_initial_prob_6'
+problem_name = 'Even_better_attempt_bump_prob_3'
 # Import the curves from svg file
-curves, _ = svg.svg2paths('Svg_drawings/' + problem_name +'/circle.svg')
+curves, _ = svg.svg2paths('Svg_drawings/' + problem_name +'/star_shaped_reference.svg')
 c_ref = curves[0]
 
-curves, _ = svg.svg2paths('Svg_drawings/' + problem_name + '/circle_most_curved.svg')
+curves, _ = svg.svg2paths('Svg_drawings/' + problem_name + '/star_shaped_test_2.svg')
 c_sol = curves[0]
 n = N_TIME
 t_ref = np.array([svg.path.inv_arclength(c_ref, s) for s in np.linspace(0, c_ref.length(), n + 1)])
