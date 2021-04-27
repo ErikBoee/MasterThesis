@@ -3,8 +3,8 @@ import solve_problem_utilities as sp_ut
 import parameters as pm
 import os
 
-problem_dictionary_filename = "New_problems/Circle_poor_initial_prob_6_noise_0_0_beta_0_0_no_angles_4_lambda_100_1000000.npy"
-new_folder_name = "Circle_poor_initial_prob_6_noise_0_0_beta_0_0_no_angles_4_lambda_100_1000000"
+problem_dictionary_filename = "New_problems/Circle_poor_initial_prob_6_noise_0_0_beta_0_5_no_angles_8_lambda_100_1000000.npy"
+new_folder_name = "Mobius_test_2"
 new_path = '../source/Runs_finished/' + new_folder_name
 
 if not os.path.exists(new_path):

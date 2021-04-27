@@ -4,7 +4,7 @@ import numpy as np
 from source.initializer_svg import theta_ref, theta_sol, point_sol, length_sol, \
     init_point, init_length, init_theta, problem_name
 
-from os import path
+import os
 
 problem_dictionary = {
     const.THETA_INITIAL: init_theta,
@@ -31,10 +31,14 @@ problem_dictionary = {
     const.NOISE_SIZE_STRING: pm.NOISE_SIZE
 }
 
-filename = "New_problems/" + problem_name + "_noise_" + str(pm.NOISE_SIZE) + "_beta_" + str(pm.BETA) + "_no_angles_" + str(
+if not os.path.exists(const.EXPERIMENTS + problem_name + "/"):
+    os.makedirs(const.EXPERIMENTS + problem_name + "/")
+
+
+filename = const.EXPERIMENTS + problem_name + "/" + problem_name + "_noise_" + str(pm.NOISE_SIZE) + "_beta_" + str(pm.BETA) + "_no_angles_" + str(
     pm.NO_ANGLES) + "_lambda_" + str(pm.LAMDA) + "_" + str(pm.MAX_LAMDA)
 
 filename = filename.replace('.', '_')
 
-if not path.exists(filename):
+if not os.path.exists(filename):
     np.save(filename, problem_dictionary, allow_pickle=True)

@@ -30,6 +30,8 @@ class OptimizationObjectBFGS:
         self.image_frequency = image_frequency
         self.noise_size = noise_size
         self.number_of_full_loops = number_of_full_loops
+        self.objective_value = 0
+        self.objective_value = self.objective_function(self.theta, self.length, self.point)
 
     # Solver and BFGS
     def solver(self, folder_path):
@@ -57,6 +59,7 @@ class OptimizationObjectBFGS:
         former_obj = -2 * const.TOL_CONV
         count = 0
         beta_k_inv = np.eye(len(self.theta) + 2)
+        self.create_dict_and_save(iterator, j)
         while (abs(former_obj - self.objective_function(self.theta, self.length, self.point)) / former_obj
                > const.TOL_CONV or count < const.COUNT_UNTIL_CONVERGENCE) \
                 and iterator < self.max_iterator:
@@ -68,8 +71,9 @@ class OptimizationObjectBFGS:
             if abs(former_obj - self.objective_function(self.theta, self.length, self.point)) <= const.TOL_CONV:
                 count += 1
             iterator += 1
-            if iterator % self.image_frequency == 0:
+            if iterator % self.image_frequency == 0 or (j == 0 and iterator < 10):
                 self.create_dict_and_save(iterator, j)
+            self.objective_value = former_obj
         return iterator
 
     def one_iteration_bfgs(self, gradient_num, beta_k_inv):
@@ -145,7 +149,7 @@ class OptimizationObjectBFGS:
         obj = self.objective_function_first_term(obj, theta, length, point)
         obj += self.objective_function_energy_term(theta)
         obj += self.objective_function_penalty_term(theta)
-        obj += self.objective_function_mobius_energy_term()
+        obj += self.objective_function_mobius_energy_term(theta, length, point)
         return obj
 
     def objective_function_first_term(self, obj, theta, length, point):
@@ -163,8 +167,11 @@ class OptimizationObjectBFGS:
     def objective_function_penalty_term(self, theta):
         return self.lamda * (OptimizationObjectBFGS.quadratic_penalty_term(theta))
 
-    def objective_function_mobius_energy_term(self):
-        return const.MOBIUS_REG * opt_ut.mobius_energy(self.gamma, self.length, const.N_TIME)
+    def objective_function_mobius_energy_term(self, theta, length, point):
+        length_vector = opt_ut.get_length_vector(theta, length)
+        return const.MOBIUS_REG * opt_ut.mobius_energy(opt_ut.calculate_entire_gamma_from_theta(theta, point, length),
+                                                       length,
+                                                       const.N_TIME, self.objective_value, length_vector)
 
     @staticmethod
     def quadratic_penalty_term(theta):
@@ -178,9 +185,9 @@ class OptimizationObjectBFGS:
         difference_theta_der = der_theta - der_theta_ref
         difference_theta_der_squared = difference_theta_der ** 2
         return opt_ut.trapezoidal_rule(difference_theta_der_squared, 1 - 1 / (2 * const.N_TIME),
-                                     1 / (2 * const.N_TIME))
+                                       1 / (2 * const.N_TIME))
 
-    #Derivatives
+    # Derivatives
     def numerical_gradient_point(self, theta, length, point):
         former_obj = self.objective_function(theta, length, point)
         point[0] += const.EPSILON
@@ -273,11 +280,11 @@ class OptimizationObjectBFGS:
                                                                                    self.point)
         dikt["Objective function energy term"] = self.objective_function_energy_term(self.theta)
         dikt["Objective function penalty term"] = self.objective_function_penalty_term(self.theta)
-        dikt["Objective function mobius energy"] = self.objective_function_mobius_energy_term()
+        dikt["Objective function mobius energy"] = self.objective_function_mobius_energy_term(self.theta, self.length,
+                                                                                              self.point)
         dikt["Lamda"] = self.lamda
         dikt["Norm of gradient"] = np.linalg.norm(self.get_gradient(self.theta, self.length, self.point))
         dikt["Theta"] = self.theta
         dikt["Length"] = self.length
         dikt["Point"] = self.point
-        dikt["Mobius"] = self.objective_function_mobius_energy_term()
         return dikt

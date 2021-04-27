@@ -14,7 +14,7 @@ STEPSIZE_TOL = 10 ** (-14)
 MAX_ITER_WOLFE = 100
 COUNT_UNTIL_CONVERGENCE = 5
 LAMBDA_MULTIPLICATION_FACTOR = 10
-MOBIUS_REG = 10**(-7)
+MOBIUS_REG = 1#10**(-5)
 
 # Problem_dictionary_strings
 THETA_RECONSTRUCTED = "Theta reconstructed"
@@ -45,3 +45,4 @@ NOISE_SIZE_STRING = "Noise size"
 NUMBER_OF_FULL_LOOPS_STRING = "Number_of_full_loops"
 INITIAL_OBJ_FUNC = "Initial Objective function"
 FINAL_OBJ_FUNC = "Final Objective function"
+EXPERIMENTS = "Experiments/"

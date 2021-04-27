@@ -1,13 +1,14 @@
 import numpy as np
 from constants import N_TIME, PIXELS
 import svgpathtools as svg
+import optimization_object_bfgs_utilities as opt_ut
 
-problem_name = 'Even_better_attempt_bump_prob_3'
+problem_name = 'Experiment_1'
 # Import the curves from svg file
-curves, _ = svg.svg2paths('Svg_drawings/' + problem_name +'/star_shaped_reference.svg')
+curves, _ = svg.svg2paths('Svg_drawings/Circle_experiments/' + problem_name + '/circle.svg')
 c_ref = curves[0]
 
-curves, _ = svg.svg2paths('Svg_drawings/' + problem_name + '/star_shaped_test_2.svg')
+curves, _ = svg.svg2paths('Svg_drawings/Circle_experiments/' + problem_name + '/circle_bump.svg')
 c_sol = curves[0]
 n = N_TIME
 t_ref = np.array([svg.path.inv_arclength(c_ref, s) for s in np.linspace(0, c_ref.length(), n + 1)])
@@ -28,3 +29,5 @@ length_ref = np.pi * radius
 point_sol = point_ref
 length_sol = length_ref
 init_theta = theta_ref
+
+gamma = opt_ut.calculate_entire_gamma_from_theta(theta_ref, point_ref, length_ref)

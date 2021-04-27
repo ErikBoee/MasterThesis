@@ -43,9 +43,9 @@ def create_image_from_curve(entire_gamma, pixels, t_list):
 
 
 def problem_solver(problem_dictionary, opt_object):
-    problem_dictionary["Initial Objective function"] = opt_object.objective_function(opt_object.theta,
-                                                                                     opt_object.length,
-                                                                                     opt_object.point)
+    problem_dictionary["Initial Objective function"] = opt_object.objective_value(opt_object.theta,
+                                                                                  opt_object.length,
+                                                                                  opt_object.point)
     theta, length, point, iterator, obj_function = opt_object.solver()
     problem_dictionary["Theta reconstructed"] = theta
     problem_dictionary["Point reconstructed"] = point
@@ -62,9 +62,9 @@ def update_problem_dictionary_and_save(problem_dictionary, opt_object, filename)
 
 
 def test_bfgs_method(problem_dictionary, opt_object, new_file_name, folder_path):
-    problem_dictionary["Initial Objective function"] = opt_object.objective_function(opt_object.theta,
-                                                                                     opt_object.length,
-                                                                                     opt_object.point)
+    problem_dictionary["Initial Objective function"] = opt_object.objective_value(opt_object.theta,
+                                                                                  opt_object.length,
+                                                                                  opt_object.point)
     theta, length, point, iterator, obj_function = opt_object.solver(folder_path)
     problem_dictionary["Theta reconstructed"] = theta
     problem_dictionary["Point reconstructed"] = point
