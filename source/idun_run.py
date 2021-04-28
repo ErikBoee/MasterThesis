@@ -8,7 +8,7 @@ input_file = sys.argv[1]
 
 problem_dictionary_filename = "Experiments/Experiment_1/" + input_file
 new_folder_name = input_file
-new_path = '../source/Runs_finished/' + new_folder_name
+new_path = '../source/Runs_finished/' + new_folder_name.split('.')[0]
 
 if not os.path.exists(new_path):
     os.makedirs(new_path)

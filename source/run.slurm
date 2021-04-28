@@ -15,4 +15,3 @@ module load Python/3.7.4-GCCcore-8.3.0
 source ../../optimization_idun_4/bin/activate
 
 python3 solve_problem.py
- load
