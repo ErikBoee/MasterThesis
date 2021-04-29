@@ -71,7 +71,7 @@ class OptimizationObjectBFGS:
             if abs(former_obj - self.objective_function(self.theta, self.length, self.point)) <= const.TOL_CONV:
                 count += 1
             iterator += 1
-            if iterator % self.image_frequency == 0 or (j == 0 and iterator < 10):
+            if iterator % self.image_frequency == 0 or (j == 0 and self.lamda == 100 and iterator < 6):
                 self.create_dict_and_save(iterator, j)
             self.objective_value = former_obj
         return iterator
