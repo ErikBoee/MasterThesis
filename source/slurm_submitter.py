@@ -7,7 +7,7 @@ experiment_number = 2
 for filename in os.listdir("Experiments/Experiment_" + str(experiment_number)):
     job_file = "run_%s.slurm" % str(i)
     if ("beta_0_04" in filename or "beta_0_16" in filename or
-            "beta_0_0" in filename or "beta_0_08" in filename):
+            "beta_0_05" in filename or "beta_0_08" in filename):
         if not os.path.exists(job_file):
             with open(job_file, 'a+') as fh:
                 fh.writelines("#!/bin/sh\n")
