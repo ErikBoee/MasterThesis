@@ -26,7 +26,7 @@ for filename in os.listdir("Experiments/Experiment_" + str(experiment_number)):
                 fh.writelines("module load Python/3.7.4-GCCcore-8.3.0\n\n")
                 fh.writelines("source ../../optimization_idun_4/bin/activate\n\n")
 
-                fh.writelines("python3 idun_run.py" + " " + filename)
+                fh.writelines("python3 idun_run.py" + " " + filename + " " + str(experiment_number))
         os.system("chmod u+x %s" % job_file)
         os.system("sbatch %s" % job_file)
         i += 1

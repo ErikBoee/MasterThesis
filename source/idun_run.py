@@ -5,7 +5,8 @@ import os
 import sys
 
 input_file = sys.argv[1]
-experiment = "Experiment_2/"
+experiment = sys.argv[2]
+experiment = "Experiment_" + experiment + "/"
 
 problem_dictionary_filename = "Experiments/" + experiment + input_file
 new_folder_name = input_file
