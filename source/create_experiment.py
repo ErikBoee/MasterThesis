@@ -15,7 +15,7 @@ for i in [4, 8, 16]:
     angles_list.append(np.linspace(0, np.pi, i + 1)[:-1])
 
 for noise in [0, 0.15]:
-    for beta in [0, 0.1, 1.0]:
+    for beta in [0.01]:
         for angles in angles_list:
             no_angles = len(angles)
             problem_dictionary = {

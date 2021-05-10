@@ -5,17 +5,18 @@ import os
 import sys
 
 input_file = sys.argv[1]
+experiment = "Experiment_2/"
 
-problem_dictionary_filename = "Experiments/Experiment_1/" + input_file
+problem_dictionary_filename = "Experiments/" + experiment + input_file
 new_folder_name = input_file
-new_path = '../source/Runs_finished/' + new_folder_name.split('.')[0]
+new_path = '../source/Experiments_finished/' + experiment + new_folder_name.split('.')[0]
 
 if not os.path.exists(new_path):
     os.makedirs(new_path)
     print("Created path", new_path)
 else:
-    os.makedirs(new_path + "_strange")
-    print("Strange")
+    print("Path existed")
+    exit()
 
 directory = new_path
 max_iterator = pm.MAX_ITER_BFGS
