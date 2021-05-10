@@ -1,13 +1,13 @@
 import os
 
-
 job_directory = os.getcwd()
 
 i = 0
 experiment_number = 2
 for filename in os.listdir("Experiments/Experiment_" + str(experiment_number)):
     job_file = "run_%s.slurm" % str(i)
-    if "beta_0_0" in filename or "beta_0_16" in filename:
+    if ("beta_0_04" in filename or "beta_0_16" in filename or
+            "beta_0_0" in filename or "beta_0_08" in filename):
         if not os.path.exists(job_file):
             with open(job_file, 'a+') as fh:
                 fh.writelines("#!/bin/sh\n")
@@ -27,6 +27,6 @@ for filename in os.listdir("Experiments/Experiment_" + str(experiment_number)):
                 fh.writelines("source ../../optimization_idun_4/bin/activate\n\n")
 
                 fh.writelines("python3 idun_run.py" + " " + filename)
-    os.system("chmod u+x %s" % job_file)
-    os.system("sbatch %s" % job_file)
-    i += 1
+        os.system("chmod u+x %s" % job_file)
+        os.system("sbatch %s" % job_file)
+        i += 1
