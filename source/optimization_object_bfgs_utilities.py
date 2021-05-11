@@ -291,6 +291,9 @@ def draw_boundary(gamma, gamma_ref, iterator, pixels):
     boundary_image = get_boundary_image(gamma, gamma_ref, pixels)
     cv2.imwrite(str(pixels) + "_x_" + str(pixels) + "_" + str(iterator) + "_boundary.png", boundary_image)
 
+def draw_boundary_finished(gamma_sol, gamma_reconstructed, pixels, path_name):
+    boundary_image = get_boundary_image(gamma_reconstructed, gamma_sol, pixels)
+    cv2.imwrite(path_name + "Finished_reconstructed_boundary.png", boundary_image)
 
 def get_boundary_image(gamma, gamma_ref, pixels):
     boundary_image = np.zeros((pixels, pixels, 3), np.uint8)
