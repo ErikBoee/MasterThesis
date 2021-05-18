@@ -3,7 +3,7 @@ import os
 job_directory = os.getcwd()
 
 i = 0
-experiment_number = 2
+experiment_number = 7
 for filename in os.listdir("Experiments/Experiment_" + str(experiment_number)):
     job_file = "run_%s.slurm" % str(i)
     if not os.path.exists(job_file):
