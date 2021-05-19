@@ -2,15 +2,23 @@ import numpy as np
 import optimization_object_bfgs_utilities as opt_ut
 import constants as const
 import os
+from numba import njit
 
 filename = "Experiments_finished/Experiment_4/Experiment_4_noise_0_beta_4_0_no_angles_4_lambda_100_1000000/Experiment_4_noise_0_beta_4_0_no_angles_4_lambda_100_1000000.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 
 
+@njit
 def error_between_gammas(gamma_rec, gamma_sol):
-    no_of_extra_points = 10
-    gamma = opt_ut.interpolate(gamma_rec, no_of_extra_points)
+    no_of_extra_points = 100
+    gamma_rec = opt_ut.interpolate(gamma_rec, no_of_extra_points)
     gamma_sol = opt_ut.interpolate(gamma_sol, no_of_extra_points)
+    max_dist = furthest_from_solution_rec(gamma_rec, gamma_sol)
+    max_dist = furthest_from_rec_solution(gamma_rec, gamma_sol, max_dist)
+    return max_dist
+
+@njit
+def furthest_from_solution_rec(gamma_rec, gamma_sol):
     max_dist = 0
     for point_rec in gamma_rec:
         min_dist = np.inf
@@ -19,7 +27,16 @@ def error_between_gammas(gamma_rec, gamma_sol):
         max_dist = max(max_dist, min_dist)
     return max_dist
 
+@njit
+def furthest_from_rec_solution(gamma_rec, gamma_sol, max_dist):
+    for point_sol in gamma_sol:
+        min_dist = np.inf
+        for point_rec in gamma_rec:
+            min_dist = min(min_dist, euclidean_length(point_rec, point_sol))
+        max_dist = max(max_dist, min_dist)
+    return max_dist
 
+@njit
 def euclidean_length(point_1, point_2):
     return np.sqrt((point_1[0] - point_2[0]) ** 2 + (point_1[1] - point_2[1]) ** 2)
 
@@ -32,6 +49,7 @@ def find_error(problem_dictionary):
                                                          problem_dictionary[const.POINT_SOLUTION],
                                                          problem_dictionary[const.LENGTH_SOLUTION])
     return error_between_gammas(gamma_rec, gamma_sol)
+
 
 experiment_number = 6
 for filename in os.listdir("Experiments_finished/Experiment_" + str(experiment_number)):
