@@ -190,13 +190,15 @@ class OptimizationObjectBFGS:
     # Derivatives
     def numerical_gradient_point(self, theta, length, point):
         former_obj = self.objective_function(theta, length, point)
-        point[0] += const.EPSILON
+        step_0 = const.EPSILON*point[0]
+        point[0] += step_0
         x_changed_obj = self.objective_function(theta, length, point)
-        point[0] -= const.EPSILON
-        point[1] += const.EPSILON
+        point[0] -= step_0
+        step_1 = const.EPSILON*point[1]
+        point[1] += step_1
         y_changed_obj = self.objective_function(theta, length, point)
-        der_p_x = (x_changed_obj - former_obj) / const.EPSILON
-        der_p_y = (y_changed_obj - former_obj) / const.EPSILON
+        der_p_x = (x_changed_obj - former_obj) / step_0
+        der_p_y = (y_changed_obj - former_obj) / step_1
         return np.array([der_p_x, der_p_y])
 
     def numerical_gradient_theta(self, theta, length, point):
@@ -208,20 +210,21 @@ class OptimizationObjectBFGS:
 
     def numerical_derivative_theta_i(self, i, former_obj, theta, length, point):
         coord = np.zeros(const.N_TIME + 1)
+        step = theta[i]*const.EPSILON
         if i == 0:
-            coord[0] = const.EPSILON
-            coord[-1] = const.EPSILON
+            coord[0] = step
+            coord[-1] = step
         else:
-            coord[i] = const.EPSILON
+            coord[i] = step
         theta += coord
         changed_obj = self.objective_function(theta, length, point)
         theta -= coord
-        return (changed_obj - former_obj) / const.EPSILON
+        return (changed_obj - former_obj) / step
 
     def numerical_gradient_length(self, theta, length, point):
         former_obj = self.objective_function(theta, length, point)
-        changed_obj = self.objective_function(theta, length + const.EPSILON, point)
-        derivative = (changed_obj - former_obj) / const.EPSILON
+        changed_obj = self.objective_function(theta, length + const.EPSILON*length, point)
+        derivative = (changed_obj - former_obj) / (const.EPSILON*length)
         return derivative
 
     # Help functions

@@ -105,5 +105,5 @@ filename = "Experiments_finished/Experiment_4/Experiment_4_noise_0_beta_4_0_no_a
 problem_dictionary = np.load(filename, allow_pickle=True).item()
 print(problem_dictionary)
 visualize_problem(problem_dictionary)
-#visualize_angles(problem_dictionary)
-#visualize_radon(problem_dictionary)
+visualize_angles(problem_dictionary)
+visualize_radon(problem_dictionary)
