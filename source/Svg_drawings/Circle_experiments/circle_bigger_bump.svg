@@ -13,7 +13,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
-   sodipodi:docname="circle_bigger_bump.svg">
+   sodipodi:docname="circle_bigger_bump.svg"
+   inkscape:export-filename="/Users/erikboe/PycharmProjects/MasterThesis/source/Svg_drawings/Circle_experiments/circle_bigger_bump.png"
+   inkscape:export-xdpi="190.75999"
+   inkscape:export-ydpi="190.75999">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -23,8 +26,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.33309179"
-     inkscape:cx="313.83611"
+     inkscape:zoom="0.3129686"
+     inkscape:cx="-301.24157"
      inkscape:cy="632.05221"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -43,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,7 +56,7 @@
      id="layer1">
     <path
        id="path12"
-       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.959514"
+       style="fill:#241c1c;fill-rule:evenodd;stroke:#000000;stroke-width:0.4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.959514"
        d="m 166.30952,145.89882 c 0,15.16485 -5.79818,28.95741 -15.27064,39.22545 -10.34717,11.21622 -25.07853,18.22693 -41.42579,18.22693 -16.329205,0 -31.046078,-6.99524 -41.391495,-18.18979 -4.989529,-5.39906 20.403544,1.45667 37.328645,-4.33308 15.2755,-5.22544 22.03303,-22.96088 22.03303,-30.16355 0,-6.68173 -3.4558,-21.50174 -20.53617,-28.68889 -16.194661,-6.81446 -46.162145,-6.04494 -42.657558,-10.73355 10.351892,-13.849263 26.756666,-22.795898 45.223548,-22.795898 17.45422,0 33.06629,7.992326 43.46661,20.562438 8.25768,9.98047 13.22982,22.84681 13.22982,36.88994 z"
        sodipodi:nodetypes="sssssssssss" />
   </g>

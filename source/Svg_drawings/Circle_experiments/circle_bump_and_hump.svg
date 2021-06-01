@@ -13,7 +13,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
-   sodipodi:docname="circle_bump_and_hump.svg">
+   sodipodi:docname="circle_bump_and_hump.svg"
+   inkscape:export-filename="/Users/erikboe/PycharmProjects/MasterThesis/source/Svg_drawings/Circle_experiments/circle_bump_and_hump.png"
+   inkscape:export-xdpi="190.75999"
+   inkscape:export-ydpi="190.75999">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -23,8 +26,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.33309179"
-     inkscape:cx="313.83611"
+     inkscape:zoom="0.28654621"
+     inkscape:cx="-357.9578"
      inkscape:cy="632.05221"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -43,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,8 +56,10 @@
      id="layer1">
     <path
        id="path12"
-       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.959514"
+       style="fill:#241c1c;fill-rule:evenodd;stroke:#000000;stroke-width:0.4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.959514"
        d="m 166.30952,145.89882 c 0,15.16485 -5.79818,28.95741 -15.27064,39.22545 -10.34717,11.21622 -25.07853,18.22693 -41.42579,18.22693 -16.329205,0 -31.046082,-6.99524 -41.391495,-18.18979 -9.492755,-10.2719 16.468089,-21.69646 16.468089,-36.87961 0,-13.01697 -27.500987,-27.40582 -20.300142,-37.03946 C 74.741429,97.393073 93.529185,65.411 111.99607,65.411 c 17.45422,0 30.68331,31.027768 41.08363,43.59788 8.25768,9.98047 13.22982,22.84681 13.22982,36.88994 z"
-       sodipodi:nodetypes="sssssssss" />
+       sodipodi:nodetypes="sssssssss"
+       inkscape:export-xdpi="190.75999"
+       inkscape:export-ydpi="190.75999" />
   </g>
 </svg>

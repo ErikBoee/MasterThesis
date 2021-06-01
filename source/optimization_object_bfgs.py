@@ -190,11 +190,11 @@ class OptimizationObjectBFGS:
     # Derivatives
     def numerical_gradient_point(self, theta, length, point):
         former_obj = self.objective_function(theta, length, point)
-        step_0 = const.EPSILON*point[0]
+        step_0 = const.EPSILON
         point[0] += step_0
         x_changed_obj = self.objective_function(theta, length, point)
         point[0] -= step_0
-        step_1 = const.EPSILON*point[1]
+        step_1 = const.EPSILON
         point[1] += step_1
         y_changed_obj = self.objective_function(theta, length, point)
         der_p_x = (x_changed_obj - former_obj) / step_0
@@ -210,7 +210,7 @@ class OptimizationObjectBFGS:
 
     def numerical_derivative_theta_i(self, i, former_obj, theta, length, point):
         coord = np.zeros(const.N_TIME + 1)
-        step = theta[i]*const.EPSILON
+        step = const.EPSILON
         if i == 0:
             coord[0] = step
             coord[-1] = step
@@ -223,8 +223,8 @@ class OptimizationObjectBFGS:
 
     def numerical_gradient_length(self, theta, length, point):
         former_obj = self.objective_function(theta, length, point)
-        changed_obj = self.objective_function(theta, length + const.EPSILON*length, point)
-        derivative = (changed_obj - former_obj) / (const.EPSILON*length)
+        changed_obj = self.objective_function(theta, length + const.EPSILON, point)
+        derivative = (changed_obj - former_obj) / const.EPSILON
         return derivative
 
     # Help functions
