@@ -2,11 +2,11 @@ import numpy as np
 import optimization_object_bfgs_utilities as opt_ut
 import matplotlib.pyplot as plt
 import constants as const
-from visualize_radon_transforms import create_image_from_curve, set_font, radon, rad_to_deg
+from visualize_radon_transforms import create_image_from_curve, set_font, radon, rad_to_deg, get_gammas
 import os
 
 
-def get_gammas(problem_dictionary):
+def get_gammas_initial(problem_dictionary):
     initial_gamma = opt_ut.calculate_entire_gamma_from_theta(problem_dictionary[const.THETA_INITIAL],
                                                              problem_dictionary[const.POINT_INITIAL],
                                                              problem_dictionary[const.LENGTH_INITIAL])
@@ -33,7 +33,7 @@ def plot_gammas(initial_gamma, solution_gamma, reconstructed_gamma):
 
 
 def visualize_problem(problem_dictionary):
-    initial_gamma, solution_gamma, reconstructed_gamma = get_gammas(problem_dictionary)
+    initial_gamma, solution_gamma, reconstructed_gamma = get_gammas_initial(problem_dictionary)
     plot_gammas(initial_gamma, solution_gamma, reconstructed_gamma)
 
 
@@ -50,9 +50,9 @@ def set_axis(beta, ax):
     bb = leg.get_bbox_to_anchor().inverse_transformed(ax.transAxes)
 
     # Change to location of the legend.
-    xOffset = 0.12
-    bb.x0 += xOffset
-    bb.x1 += xOffset
+    xOffset = 0.15
+    #bb.y0 += xOffset
+    #bb.y1 += xOffset
     leg.set_bbox_to_anchor(bb, transform=ax.transAxes)
 
 
@@ -93,7 +93,7 @@ def plot_one_angle(angle, radon_transform_reconstructed, radon_transform_py, pix
     plt.show()
 
 
-def visualize_all_regularizations(experiment_number, no_angles):
+def update_params():
     plt.rcParams['text.latex.preamble'] = [r"\usepackage{lmodern}"]
     # Options
     params = {'text.usetex': True,
@@ -101,16 +101,20 @@ def visualize_all_regularizations(experiment_number, no_angles):
               'font.family': 'lmodern'
               }
     plt.rcParams.update(params)
+
+
+def visualize_all_regularizations(experiment_number, no_angles):
+    update_params()
     reg_to_pos = {0.00: 1, 0.01: 2, 0.10: 3, 1.00: 4}
     set_font()
     fig = plt.figure(figsize=[10, 10])
     for filename in os.listdir("Experiments_finished/Experiment_" + str(experiment_number)):
-        if str(no_angles) in filename[13:] and not "noise_0_15" in filename:
+        if "_" + str(no_angles) + "_" in filename[13:] and  "noise_0_15" in filename:
             filepath = "Experiments_finished/Experiment_" + str(
                 experiment_number) + "/" + filename + "/" + filename + ".npy"
             problem_dictionary = np.load(filepath, allow_pickle=True).item()
             pos = reg_to_pos[round(problem_dictionary[const.BETA_STRING] / no_angles, 2)]
-            initial_gamma, solution_gamma, reconstructed_gamma = get_gammas(problem_dictionary)
+            initial_gamma, solution_gamma, reconstructed_gamma = get_gammas_initial(problem_dictionary)
             ax = fig.add_subplot(2, 2, pos)
 
             plt.plot(initial_gamma[:, 0], initial_gamma[:, 1], label=r"$\gamma_0$", color="dodgerblue")
@@ -121,7 +125,8 @@ def visualize_all_regularizations(experiment_number, no_angles):
     plt.savefig(fname="figures_master/ex_8_no_angles_8_noise.pdf")
 
 
-def visualize_radon(problem_dictionary_inner):
+def visualize_all_radon(problem_dictionary_inner):
+    update_params()
     reconstructed_gamma, reconstructed_gamma_der, solution_gamma = get_gammas(problem_dictionary_inner)
 
     pixels = problem_dictionary_inner[const.PIXELS_STRING]
@@ -129,23 +134,42 @@ def visualize_radon(problem_dictionary_inner):
     filled_image = create_image_from_curve(solution_gamma, pixels, solution_gamma)
 
     set_font()
-    plt.figure(figsize=[10, 10])
+    plt.figure(figsize=[15, 10])
     i = 1
     for angle in problem_dictionary_inner[const.ANGLES_STRING]:
         radon_transform_py = radon(filled_image, theta=[rad_to_deg(angle)], circle=True)
-        plt.subplot(2, 2, i)
+        radon_transform_reconstructed = opt_ut.radon_transform(reconstructed_gamma, reconstructed_gamma_der,
+                                                               angle, pixels)
+        radon_transform_reconstructed = np.maximum(radon_transform_reconstructed,
+                                                   np.zeros(len(radon_transform_reconstructed)))
+        plt.subplot(2, 3, i)
         plt.title(str(round(rad_to_deg(angle))) + " degrees", fontsize=30)
-        plt.plot(np.linspace(0, pixels, pixels)[49:249], radon_transform_py[49:249], color='red')
+        plt.plot(np.linspace(0, pixels, pixels)[100:270], radon_transform_reconstructed[100:270], color='red',
+                 label="R")
+        plt.plot(np.linspace(0, pixels, pixels)[100:270], radon_transform_py[100:270], label="S", color='navy')
         plt.xticks(fontsize=30)
         plt.yticks(fontsize=30)
+        # plt.legend(frameon=False, fontsize=28, loc="upper left")
         i += 1
+    ax = plt.subplot(2, 3, 6)
+    plt.plot(reconstructed_gamma[:, 0], reconstructed_gamma[:, 1], color='red', label=r"$\gamma_r$")
+    plt.plot(solution_gamma[:, 0], solution_gamma[:, 1], label=r"$\gamma_s$", color='navy')
+    plt.xticks(fontsize=30)
+    plt.yticks(fontsize=30)
+    leg = plt.legend(frameon=False, fontsize=30)
+    plt.draw()
+    bb = leg.get_bbox_to_anchor().inverse_transformed(ax.transAxes)
+    xOffset = 0.12
+    bb.x0 += xOffset
+    bb.x1 += xOffset
+    leg.set_bbox_to_anchor(bb, transform=ax.transAxes)
     plt.show()
 
 
-filename = "Experiments_finished/Experiment_4/Experiment_4_noise_0_beta_4_0_no_angles_4_lambda_100_1000000/Experiment_4_noise_0_beta_4_0_no_angles_4_lambda_100_1000000.npy"
-problem_dictionary = np.load(filename, allow_pickle=True).item()
+#filename = "Experiments_finished/Experiment_10/Experiment_8_noise_0_beta_0_05_no_angles_5_lambda_100_1000000/Experiment_8_noise_0_beta_0_05_no_angles_5_lambda_100_1000000.npy"
+#problem_dictionary = np.load(filename, allow_pickle=True).item()
 # print(problem_dictionary)
 # visualize_problem(problem_dictionary)
 # visualize_angles(problem_dictionary)
-# visualize_radon(problem_dictionary)
-visualize_all_regularizations(8, 5)
+#visualize_all_radon(problem_dictionary)
+visualize_all_regularizations(10, 5)

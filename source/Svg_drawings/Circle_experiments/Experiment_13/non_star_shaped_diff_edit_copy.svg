@@ -13,7 +13,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
-   sodipodi:docname="non_star_shaped_diff_edit.svg">
+   sodipodi:docname="non_star_shaped_diff_edit_copy.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -23,16 +23,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.31247182"
-     inkscape:cx="-302.21944"
-     inkscape:cy="632.05221"
+     inkscape:zoom="0.26065328"
+     inkscape:cx="-8.2704929"
+     inkscape:cy="469.66253"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
      inkscape:window-width="1252"
      inkscape:window-height="779"
-     inkscape:window-x="1495"
+     inkscape:window-x="1494"
      inkscape:window-y="25"
      inkscape:window-maximized="0" />
   <metadata
@@ -43,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -55,6 +55,8 @@
        id="path12"
        style="fill:#2b0000;fill-rule:evenodd;stroke:#000000;stroke-width:0.4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.959514"
        d="m 166.30952,145.89882 c 0,15.16485 -40.7485,-1.22696 -50.22096,9.04108 -10.34717,11.21622 9.87179,48.4113 -6.47547,48.4113 -16.329205,0 -23.897152,-9.37822 -34.242565,-20.57277 -9.492755,-10.2719 9.319159,-19.31348 9.319159,-34.49663 0,-13.01697 -27.500984,-27.40582 -20.300142,-37.03946 5.89932,-7.8924 13.146325,9.11365 25.123425,13.58679 9.039829,3.37614 22.483353,-6.19832 30.426353,-6.19832 17.45422,0 13.20815,-37.284232 23.60847,-24.714116 5.03468,6.085056 12.39132,18.853096 17.367,31.075716 3.18523,7.82442 5.39473,15.42533 5.39473,20.90641 z"
-       sodipodi:nodetypes="sssssssssss" />
+       sodipodi:nodetypes="sssssssssss"
+       inkscape:export-xdpi="190"
+       inkscape:export-ydpi="190" />
   </g>
 </svg>

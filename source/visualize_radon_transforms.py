@@ -62,6 +62,6 @@ def visualize_radon(problem_dictionary_inner):
         plot_one_angle(angle, radon_transform_reconstructed,  radon_transform_py, pixels)
 
 
-filename = "Experiments_finished/Experiment_8/Experiment_8_noise_0_beta_0_no_angles_8_lambda_100_1000000/Experiment_8_noise_0_beta_0_no_angles_8_lambda_100_1000000.npy"
+filename = "Experiments_finished/Experiment_8/Experiment_8_noise_0_beta_0_5_no_angles_5_lambda_100_1000000/Experiment_8_noise_0_beta_0_5_no_angles_5_lambda_100_1000000.npy"
 problem_dictionary = np.load(filename, allow_pickle=True).item()
-visualize_radon(problem_dictionary)
+#visualize_radon(problem_dictionary)

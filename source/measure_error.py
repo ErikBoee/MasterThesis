@@ -58,20 +58,22 @@ def find_error(problem_dictionary):
 no_of_angles_to_table_row = {4: 1, 5: 2, 8: 3, 16: 4}
 reg_to_table_column = {0.00: 0, 0.01: 1, 0.10: 2, 1.00: 3}
 
-experiment_number = 8
+experiment_number = 9
 table = [['0.0', 0, 0, 0, 0, 0, 0, 0, 0], ['0.01N', 0, 0, 0, 0, 0, 0, 0, 0], ['0.1N', 0, 0, 0, 0, 0, 0, 0, 0],
          ['N', 0, 0, 0, 0, 0, 0, 0, 0]]
 for filename in os.listdir("Experiments_finished/Experiment_" + str(experiment_number)):
     filepath = "Experiments_finished/Experiment_" + str(experiment_number) + "/" + filename + "/" + filename + ".npy"
-    problem_dictionary = np.load(filepath, allow_pickle=True).item()
-    N = len(problem_dictionary[const.ANGLES_STRING])
-    j = no_of_angles_to_table_row[N]
-    i = reg_to_table_column[round(problem_dictionary[const.BETA_STRING] / N, 2)]
-    if problem_dictionary[const.NOISE_SIZE_STRING] > 0:
-        table[i][j+4] = round(find_error(problem_dictionary), 2)
-    else:
-        table[i][j] = round(find_error(problem_dictionary), 2)
+    if os.path.exists(filepath):
+        problem_dictionary = np.load(filepath, allow_pickle=True).item()
+        N = len(problem_dictionary[const.ANGLES_STRING])
+        j = no_of_angles_to_table_row[N]
+        i = reg_to_table_column[round(problem_dictionary[const.BETA_STRING] / N, 2)]
+        if problem_dictionary[const.NOISE_SIZE_STRING] > 0:
+            table[i][j+4] = round(find_error(problem_dictionary), 2)
+        else:
+            table[i][j] = round(find_error(problem_dictionary), 2)
 
-    print("Noise:", problem_dictionary[const.NOISE_SIZE_STRING])
+        print("Noise:", problem_dictionary[const.NOISE_SIZE_STRING])
+
 
 print(tabulate(table, headers=["Regularization", r"$A_4$", "$A_5$", "$A_8", "A_16", "$A_4^n$", "$A_5$", "$A_8", "A_16"], tablefmt='latex'))
