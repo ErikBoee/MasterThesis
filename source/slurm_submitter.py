@@ -3,8 +3,8 @@ import os
 job_directory = os.getcwd()
 
 i = 0
-experiment_number = 7
-for filename in os.listdir("Experiments/Experiment_" + str(experiment_number)):
+experiment_number = 4
+for filename in os.listdir("Experiments/Experiment_" + str(experiment_number) + "_mod_const"):
     job_file = "run_%s.slurm" % str(i)
     if not os.path.exists(job_file):
         with open(job_file, 'a+') as fh:
@@ -24,7 +24,7 @@ for filename in os.listdir("Experiments/Experiment_" + str(experiment_number)):
             fh.writelines("module load Python/3.7.4-GCCcore-8.3.0\n\n")
             fh.writelines("source ../../optimization_idun_4/bin/activate\n\n")
 
-            fh.writelines("python3 idun_run.py" + " " + filename + " " + str(experiment_number))
+            fh.writelines("python3 idun_run.py" + " " + filename + " " + str(experiment_number) + "_mod_const")
     os.system("chmod u+x %s" % job_file)
     os.system("sbatch %s" % job_file)
     i += 1
