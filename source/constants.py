@@ -1,12 +1,12 @@
-N_TIME = 100
-PIXELS = 300
+N_TIME = 80 # old value is 100
+PIXELS = 600 # Old value is 300
 N_ALPHAS = PIXELS
 EXACT_RADON_TRANSFORM = "exact_radon_transform"
 ALPHAS = "alphas"
 EPSILON = 10 ** (-7)
 STEPSIZE = 1
 TOL_CONV = 10 ** (-5)
-DELTA = 7 * 10 ** (-3)
+DELTA = 10 ** (-2) # Old value is 7 *10^(-7)
 ITERATOR = "Iterator = "
 PENALTY_TOL = 10 ** (-6)
 SEED = 1
@@ -14,7 +14,7 @@ STEPSIZE_TOL = 10 ** (-14)
 MAX_ITER_WOLFE = 100
 COUNT_UNTIL_CONVERGENCE = 5
 LAMBDA_MULTIPLICATION_FACTOR = 10
-MOBIUS_REG = 1#10**(-5)
+MOBIUS_REG = 1
 
 # Problem_dictionary_strings
 THETA_RECONSTRUCTED = "Theta reconstructed"

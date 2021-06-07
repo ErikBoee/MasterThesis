@@ -3,12 +3,12 @@ from constants import N_TIME, PIXELS
 import svgpathtools as svg
 import optimization_object_bfgs_utilities as opt_ut
 
-problem_name = 'Experiment_14'
+problem_name = 'Experiment_10_mod_const'
 # Import the curves from svg file
-curves, _ = svg.svg2paths('Svg_drawings/Circle_experiments/' + problem_name + '/non_star_shaped_edited.svg')
+curves, _ = svg.svg2paths('Svg_drawings/Circle_experiments/' + problem_name + '/circle.svg')
 c_ref = curves[0]
 
-curves, _ = svg.svg2paths('Svg_drawings/Circle_experiments/' + problem_name + '/non_star_shaped_poor_initial.svg')
+curves, _ = svg.svg2paths('Svg_drawings/Circle_experiments/' + problem_name + '/non_star_shaped.svg')
 c_sol = curves[0]
 n = N_TIME
 t_ref = np.array([svg.path.inv_arclength(c_ref, s) for s in np.linspace(0, c_ref.length(), n + 1)])
