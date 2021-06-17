@@ -43,16 +43,19 @@ def set_axis(beta, ax):
     plt.xticks(fontsize=22)
     plt.yticks(fontsize=22)
     plt.title(r"$\beta$ = " + beta, fontsize=22)
-    leg = plt.legend(frameon=False, fontsize=22)
+    leg = plt.legend(frameon=False, fontsize=22, loc="upper right", handlelength=1.2, handletextpad=0.3)
     plt.draw()  # Draw the figure so you can find the positon of the legend.
 
     # Get the bounding box of the original legend
     bb = leg.get_bbox_to_anchor().inverse_transformed(ax.transAxes)
 
     # Change to location of the legend.
-    xOffset = 0.15
-    #bb.y0 += xOffset
-    #bb.y1 += xOffset
+    yOffset = 0.07
+    xOffset = 0.16
+    bb.y0 -= yOffset
+    bb.y1 -= yOffset
+    bb.x0 -= xOffset
+    bb.x1 -= xOffset
     leg.set_bbox_to_anchor(bb, transform=ax.transAxes)
 
 
@@ -109,12 +112,14 @@ def visualize_all_regularizations(experiment_number, no_angles):
     set_font()
     fig = plt.figure(figsize=[10, 10])
     for filename in os.listdir("Experiments_finished/Experiment_" + str(experiment_number)):
-        if "_" + str(no_angles) + "_" in filename[13:] and  "noise_0_15" in filename:
+        if "_" + str(no_angles) + "_" in filename[13:]  and "noise_0_15" in filename:
             filepath = "Experiments_finished/Experiment_" + str(
                 experiment_number) + "/" + filename + "/" + filename + ".npy"
             problem_dictionary = np.load(filepath, allow_pickle=True).item()
             pos = reg_to_pos[round(problem_dictionary[const.BETA_STRING] / no_angles, 2)]
             initial_gamma, solution_gamma, reconstructed_gamma = get_gammas_initial(problem_dictionary)
+            if pos == 1:
+                print(reconstructed_gamma)
             ax = fig.add_subplot(2, 2, pos)
 
             plt.plot(initial_gamma[:, 0], initial_gamma[:, 1], label=r"$\gamma_0$", color="dodgerblue")
@@ -172,4 +177,4 @@ def visualize_all_radon(problem_dictionary_inner):
 # visualize_problem(problem_dictionary)
 # visualize_angles(problem_dictionary)
 #visualize_all_radon(problem_dictionary)
-visualize_all_regularizations(10, 5)
+visualize_all_regularizations(1, 16)
