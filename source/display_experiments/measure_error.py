@@ -58,7 +58,7 @@ def find_error(problem_dictionary):
 no_of_angles_to_table_row = {4: 1, 5: 4, 8: 2, 16: 3}
 reg_to_table_column = {0.00: 0, 0.01: 1, 0.10: 2, 1.00: 3}
 
-experiment_number = 14
+experiment_number = 9
 table = [['0.0', 0, 0, 0, 0, 0, 0, 0, 0], ['$0.01N$', 0, 0, 0, 0, 0, 0, 0, 0], ['$0.1N$', 0, 0, 0, 0, 0, 0, 0, 0],
          ['$N$', 0, 0, 0, 0, 0, 0, 0, 0]]
 for filename in os.listdir("Experiments_finished/Experiment_" + str(experiment_number)):
